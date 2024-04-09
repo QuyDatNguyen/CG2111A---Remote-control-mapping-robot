@@ -226,7 +226,12 @@ void sendCommand(char command)
 			commandPacket.command = COMMAND_GET_STATS;
 			sendPacket(&commandPacket);
 			break;
-
+		//case of colour sensing
+		case 'cs':
+		case 'CS':
+			commandPacker.command = COMMAND_GET_COLOUR;
+			sendPacket(&commandPacket);
+			break;
 		case 'q':
 		case 'Q':
 			exitFlag=1;
@@ -262,7 +267,7 @@ int main()
 	while(!exitFlag)
 	{
 		char ch;
-		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit)\n");
+		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit, cs=colour_sensing stats)\n");
 		scanf("%c", &ch);
 
 		// Purge extraneous characters from input stream
