@@ -8,7 +8,7 @@
 #include "serialize.h"
 #include "constants.h"
 
-#define PORT_NAME			"/dev/ttyACM0"
+#define PORT_NAME			"/dev/ttyACM1"
 #define BAUD_RATE			B9600
 
 int exitFlag=0;
@@ -226,17 +226,18 @@ void sendCommand(char command)
 			commandPacket.command = COMMAND_GET_STATS;
 			sendPacket(&commandPacket);
 			break;
-		//case of colour sensing
-		case 'cs':
-		case 'CS':
-			commandPacker.command = COMMAND_GET_COLOUR;
-			sendPacket(&commandPacket);
-			break;
+
 		case 'q':
 		case 'Q':
 			exitFlag=1;
 			break;
-
+		/**
+		case 'd':
+		case 'D':
+			commandPacket.command = COMMAND_GET_COLOUR;
+			sendPacket(&commandPacket);
+			break;
+		*/	
 		default:
 			printf("Bad command\n");
 
@@ -267,7 +268,7 @@ int main()
 	while(!exitFlag)
 	{
 		char ch;
-		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit, cs=colour_sensing stats)\n");
+		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit)\n");
 		scanf("%c", &ch);
 
 		// Purge extraneous characters from input stream

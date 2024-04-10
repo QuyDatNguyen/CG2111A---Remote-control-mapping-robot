@@ -1,5 +1,5 @@
 #include <serialize.h>
-
+#include <math.h>
 #include "packet.h"
 #include "constants.h"
 #include <stdarg.h>
@@ -19,10 +19,27 @@ volatile TDirection dir;
 // by taking revs * WHEEL_CIRC
 
 #define WHEEL_CIRC          20
-
+#define ALEX_LENGTH         13
+#define ALEX_BREADTH        13
+volatile float alexDiagonal;
+volatile float alexCirc;
 /*
  *    Alex's State Variables
  */
+
+//Colour sensor
+//#define S0 4
+//#define S1 5
+//#define S2 6
+//#define S3 7
+//#define sensorOut 8
+//pins must be changed according to the arduino pins we use
+
+//int frequency = 0;
+unsigned long computeDeltaTicks (float ang) {
+  unsigned long ticks = (unsigned long) ((ang * alexCirc * COUNTS_PER_REV) / (360.0 * WHEEL_CIRC));
+  return ticks;
+}
 void left(float ang, float speed) {
   ccw(ang, speed);
 }
@@ -42,6 +59,13 @@ volatile unsigned long rightReverseTicks;
 // Forward and backward distance traveled
 volatile unsigned long forwardDist;
 volatile unsigned long reverseDist;
+//variables to keep track whether we have moved
+//a command distance
+//ref: w9s1 activity 4
+unsigned long deltaDist;
+unsigned long newDist;
+unsigned long deltaTicks; 
+unsigned long targetTicks;
 //Left and right encoder ticks for turning
 volatile unsigned long leftForwardTicksTurns; 
 volatile unsigned long rightForwardTicksTurns;
@@ -347,20 +371,20 @@ void clearOneCounter(int which)
       clearCounters();
       break;
 
-    // case 1:
-    //   leftTicks=0;
-    //   break;
+    case 1:
+      leftForwardTicks=0;
+       break;
 
-    // case 2:
-    //   rightTicks=0;
-    //   break;
+    case 2:
+       rightForwardTicks=0;
+       break;
 
     case 3:
-      leftRevs=0;
+      leftReverseTicks=0;
       break;
 
     case 4:
-      rightRevs=0;
+      rightReverseTicks=0;
       break;
 
     case 5:
@@ -374,7 +398,22 @@ void clearOneCounter(int which)
   
   // clearCounters();
 }
+//colour sensor setup
+
 // Intialize Alex's internal states
+//void setupcolour() {
+//  pinMode(S0, OUTPUT);
+//  pinMode(S1, OUTPUT);
+//  pinMode(S2, OUTPUT);
+//  pinMode(S3, OUTPUT);
+//  pinMode(sensorOut, INPUT);
+//  
+//  // Setting frequency-scaling to 20%
+//  digitalWrite(S0,HIGH);
+//  digitalWrite(S1,LOW);
+//  
+//  Serial.begin(9600); //for testing
+//}
 
 void initializeState()
 {
@@ -458,10 +497,12 @@ void waitForHello()
 
 void setup() {
   // put your setup code here, to run once:
-
+  alexDiagonal = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
+  alexCirc = PI * alexDiagonal;
   cli();
   setupEINT();
   setupSerial();
+  //setupcolour();
   startSerial();
   enablePullups();
   initializeState();
@@ -515,6 +556,33 @@ void loop() {
       {
         sendBadChecksum();
       } 
-      
-      
+  if (deltaDist > 0)
+  {
+    if (dir==FORWARD)
+    {
+        if(forwardDist > newDist)
+        {
+          deltaDist = 0;
+          newDist = 0;
+          stop();
+        }
+    }
+    else 
+        if(dir == BACKWARD)
+        {
+            if(reverseDist > newDist)
+            {
+              deltaDist = 0;
+              newDist = 0;
+              stop();
+            }
+        }
+        else
+ if(dir == STOP)
+    {
+      deltaDist = 0;
+      newDist = 0;
+      stop();
+    }
+  }
 }
