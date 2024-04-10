@@ -1,18 +1,24 @@
 # Commands
 
-Check which port is being used
+!! Run all of this in `~/cg2111a/Desktop/cg2111a_git`!
+
+```sh
+cd ~/cg2111a/Desktop/cg2111a_git
+```
+
+Check which port is the Arduino being connected to the RPi
 
 ```sh
 ls /dev/ttyACM*
 ```
 
-Sync RPi code to latest version from GitHub
+Sync code on the RPi to latest version from GitHub
 
 ```sh
-gh repo sync
+git stash --all && gh repo sync
 ```
 
-Run RPi side
+Run code for RPi side
 
 ```sh
 gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
