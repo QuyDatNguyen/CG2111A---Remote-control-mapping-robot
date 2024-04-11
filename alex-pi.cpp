@@ -172,7 +172,7 @@ void getParams(TPacket *commandPacket)
 	flushInput();
 }
 
-void sendCommand(char command)
+void sendCommand(char command, int *params)
 {
 	TPacket commandPacket;
 
@@ -182,29 +182,37 @@ void sendCommand(char command)
 	{
 	case 'f':
 	case 'F':
-		getParams(&commandPacket);
+		// getParams(&commandPacket);
 		commandPacket.command = COMMAND_FORWARD;
+		commandPacket.params[0] = params[0];
+		commandPacket.params[1] = params[1];
 		sendPacket(&commandPacket);
 		break;
 
 	case 'b':
 	case 'B':
-		getParams(&commandPacket);
+		// getParams(&commandPacket);
 		commandPacket.command = COMMAND_REVERSE;
+		commandPacket.params[0] = params[0];
+		commandPacket.params[1] = params[1];
 		sendPacket(&commandPacket);
 		break;
 
 	case 'l':
 	case 'L':
-		getParams(&commandPacket);
+		// getParams(&commandPacket);
 		commandPacket.command = COMMAND_TURN_LEFT;
+		commandPacket.params[0] = params[0];
+		commandPacket.params[1] = params[1];
 		sendPacket(&commandPacket);
 		break;
 
 	case 'r':
 	case 'R':
-		getParams(&commandPacket);
+		// getParams(&commandPacket);
 		commandPacket.command = COMMAND_TURN_RIGHT;
+		commandPacket.params[0] = params[0];
+		commandPacket.params[1] = params[1];
 		sendPacket(&commandPacket);
 		break;
 
@@ -266,14 +274,42 @@ int main()
 
 	while (!exitFlag)
 	{
-		char ch;
+		// char ch;
 		printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit)\n");
-		scanf("%c", &ch);
+		// scanf("%c", &ch);
+		// scan a string instead, and split the string by " "s to get the command and parameters
 
-		// Purge extraneous characters from input stream
-		flushInput();
+		char command[100];
 
-		sendCommand(ch);
+		scanf("%s", command);
+		char ch = command[0];
+
+		int params[2] = {0, 0};
+
+		// if command needs parameters, parse them
+		if (ch == 'f' || ch == 'b' || ch == 'l' || ch == 'r')
+		{
+			int i = 0;
+			for (char *p = command; *p; p++)
+			{
+				if (*p == ' ')
+				{
+					i++;
+					continue;
+				}
+				params[i] = params[i] * 10 + *p - '0';
+			}
+
+			sendCommand(ch, params);
+		}
+		else
+		{
+
+			// Purge extraneous characters from input stream
+			flushInput();
+
+			sendCommand(ch, params);
+		}
 	}
 
 	printf("Closing connection to Arduino.\n");
