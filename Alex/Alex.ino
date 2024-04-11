@@ -97,7 +97,7 @@ void right(float ang, float speed)
   else
     deltaTicks = computeDeltaTicks(ang);
 
-  targetTicks = leftReverseTicksTurns + deltaTicks;
+  targetTicks = rightReverseTicksTurns + deltaTicks;
   cw(ang, speed);
 }
 /*
@@ -272,6 +272,7 @@ void leftISR()
   }
   else if (dir == LEFT)
   {
+
     leftReverseTicksTurns++;
   }
   else if (dir == RIGHT)
