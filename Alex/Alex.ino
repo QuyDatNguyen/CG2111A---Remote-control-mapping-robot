@@ -1,3 +1,4 @@
+
 #include <serialize.h>
 #include <math.h>
 #include "packet.h"
@@ -425,17 +426,18 @@ void clearOneCounter(int which)
 //  
 //  Serial.begin(9600); //for testing
 //}
-int getAvgReading(int times, int low_map, int high_map) {
-  int reading = 0;
-  int total = 0;
-  for (int i = 0; i < times; i ++) {
-    reading = pulseIn(sensorOut, LOW);
-    reading = map(reading, high_map, low_map, 255, 0);
-    total += reading;
-    delay(50);
-  }
-  return total/times;
-}
+// int getAvgReading(int times, int low_map, int high_map) {
+//   int reading = 0;
+//   int total = 0;
+//   for (int i = 0; i < times; i ++) {
+//     reading = pulseIn(sensorOut, LOW);
+//     reading = map(reading, high_map, low_map, 255, 0);
+//     total += reading;
+//     delay(50);
+//   }
+//   return total/times;
+// }
+/**
 void on_colour(int colour) {
   //change to read Red value
   if (colour == 0) {
@@ -496,6 +498,7 @@ int getColour() {
   Serial.println(colour);
   return colour;
 }
+*/
 void initializeState()
 {
   clearCounters();
