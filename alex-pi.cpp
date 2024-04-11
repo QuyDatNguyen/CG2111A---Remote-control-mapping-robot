@@ -255,7 +255,7 @@ void sendCommand(char command, int *params)
 int main()
 {
 	// Connect to the Arduino
-	startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 5);
+	startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 1);
 
 	// Sleep for two seconds
 	printf("WAITING TWO SECONDS FOR ARDUINO TO REBOOT\n");
@@ -282,7 +282,9 @@ int main()
 
 		char command[100];
 
-		scanf("%s", command);
+		// scanf("%s", command);
+		// do the above but dont end on a space, only end on newlines
+		fgets(command, 100, stdin);
 		char ch = command[0];
 
 		int params[2] = {0, 0};
@@ -291,19 +293,20 @@ int main()
 		if (ch == 'f' || ch == 'b' || ch == 'l' || ch == 'r')
 		{
 			int i = 0;
-			for (char *p = command;
+			char *p = command + 2;
+			for (*p;
 				 *p != '\0' && i < 2;
 				 p++)
 			{
+				// printf("{%c} params[%d] = %d\n", *p, i, params[i]);
 				if (*p == ' ')
 				{
 					i++;
 					continue;
 				}
 				params[i] = params[i] * 10 + *p - '0';
-				printf("params[%d] = %d\n", i, params[i]);
 			}
-			printf("Command: %c, Distance: %d, Power: %d\n", ch, params[0], params[1]);
+			// printf("Command: %c, Distance: %d, Power: %d\n", ch, params[0], params[1]);
 
 			sendCommand(ch, params);
 		}
