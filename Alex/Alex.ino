@@ -6,9 +6,6 @@
 #include <stdarg.h>
 // the code is modified for W9S1
 volatile TDirection dir;
-/*
- * Alex's configuration constants
- */
 
 // Store the ticks from Alex's left and
 // right encoders.
@@ -45,6 +42,10 @@ volatile unsigned long rightReverseTicksTurns;
 // We will use this to calculate forward/backward distance traveled
 // by taking revs * WHEEL_CIRC
 #define RGBWait 300 // in milisecs
+/*
+ * Alex's configuration constants
+ */
+
 #define WHEEL_CIRC 20
 #define ALEX_LENGTH 13
 #define ALEX_BREADTH 13
