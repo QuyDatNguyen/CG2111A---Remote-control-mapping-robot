@@ -55,10 +55,22 @@ unsigned long computeDeltaTicks(float ang)
 }
 void left(float ang, float speed)
 {
+  if (ang == 0)
+    deltaTicks = 99999999;
+  else
+    deltaTicks = computeDeltaTicks(ang);
+
+  targetTicks = leftReverseTicksTurns + deltaTicks;
   ccw(ang, speed);
 }
 void right(float ang, float speed)
 {
+  if (ang == 0)
+    deltaTicks = 99999999;
+  else
+    deltaTicks = computeDeltaTicks(ang);
+
+  targetTicks = leftReverseTicksTurns + deltaTicks;
   cw(ang, speed);
 }
 // Store the ticks from Alex's left and
@@ -597,6 +609,7 @@ void setup()
   enablePullups();
   initializeState();
   sei();
+  Serial.begin(9600);
 }
 
 void handlePacket(TPacket *packet)
@@ -646,6 +659,7 @@ void loop()
   }
   if (deltaDist > 0)
   {
+    Serial.println(newDist);
     if (dir == FORWARD)
     {
       if (forwardDist > newDist)
@@ -668,6 +682,33 @@ void loop()
     {
       deltaDist = 0;
       newDist = 0;
+      stop();
+    }
+  }
+  if (deltaTicks > 0)
+  {
+    if (dir == LEFT)
+    {
+      if (leftReverseTicksTurns >= targetTicks)
+      {
+        deltaTicks = 0;
+        targetTicks = 0;
+        stop();
+      }
+    }
+    else if (dir == RIGHT)
+    {
+      if (rightReverseTicksTurns >= targetTicks)
+      {
+        deltaTicks = 0;
+        targetTicks = 0;
+        stop();
+      }
+    }
+    else if (dir == STOP)
+    {
+      deltaTicks = 0;
+      targetTicks = 0;
       stop();
     }
   }
