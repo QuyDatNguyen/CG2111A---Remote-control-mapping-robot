@@ -255,7 +255,7 @@ void sendCommand(char command, int *params)
 int main()
 {
 	// Connect to the Arduino
-	startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 1);
+	startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 3);
 
 	// Sleep for two seconds
 	printf("WAITING TWO SECONDS FOR ARDUINO TO REBOOT\n");
