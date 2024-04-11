@@ -28,6 +28,15 @@ git stash --all && gh repo sync
 gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
 ```
 
+(Steps 2 to 4 in one command:
+
+```sh
+git stash --all && gh repo sync && gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
+```
+
+)
+
+
 # Troubleshooting
 
 - Check if the port is defined correctly! Sometimes its not ttyACM0

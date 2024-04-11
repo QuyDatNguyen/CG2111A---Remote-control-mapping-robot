@@ -299,6 +299,7 @@ int main()
 				}
 				params[i] = params[i] * 10 + *p - '0';
 			}
+			printf("Command: %c, Distance: %d, Power: %d\n", ch, params[0], params[1]);
 
 			sendCommand(ch, params);
 		}
