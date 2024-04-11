@@ -7,6 +7,7 @@
 #include "serial.h"
 #include "serialize.h"
 #include "constants.h"
+#include <string.h>
 
 #define PORT_NAME "/dev/ttyACM0"
 #define BAUD_RATE B9600
@@ -290,7 +291,9 @@ int main()
 		if (ch == 'f' || ch == 'b' || ch == 'l' || ch == 'r')
 		{
 			int i = 0;
-			for (char *p = command; *p; p++)
+			for (char *p = command;
+				 *p != '\0' && i < 2;
+				 p++)
 			{
 				if (*p == ' ')
 				{
