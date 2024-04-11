@@ -10,6 +10,32 @@ volatile TDirection dir;
  * Alex's configuration constants
  */
 
+// Store the ticks from Alex's left and
+// right encoders.
+volatile unsigned long leftForwardTicks;
+volatile unsigned long rightForwardTicks;
+
+// Store the revolutions on Alex's left
+// and right wheels
+volatile unsigned long leftReverseTicks;
+volatile unsigned long rightReverseTicks;
+
+// Forward and backward distance traveled
+volatile unsigned long forwardDist;
+volatile unsigned long reverseDist;
+// variables to keep track whether we have moved
+// a command distance
+// ref: w9s1 activity 4
+unsigned long deltaDist;
+unsigned long newDist;
+unsigned long deltaTicks;
+unsigned long targetTicks;
+// Left and right encoder ticks for turning
+volatile unsigned long leftForwardTicksTurns;
+volatile unsigned long rightForwardTicksTurns;
+volatile unsigned long leftReverseTicksTurns;
+volatile unsigned long rightReverseTicksTurns;
+
 // Number of ticks per revolution from the
 // wheel encoder.
 
@@ -73,31 +99,6 @@ void right(float ang, float speed)
   targetTicks = leftReverseTicksTurns + deltaTicks;
   cw(ang, speed);
 }
-// Store the ticks from Alex's left and
-// right encoders.
-volatile unsigned long leftForwardTicks;
-volatile unsigned long rightForwardTicks;
-
-// Store the revolutions on Alex's left
-// and right wheels
-volatile unsigned long leftReverseTicks;
-volatile unsigned long rightReverseTicks;
-
-// Forward and backward distance traveled
-volatile unsigned long forwardDist;
-volatile unsigned long reverseDist;
-// variables to keep track whether we have moved
-// a command distance
-// ref: w9s1 activity 4
-unsigned long deltaDist;
-unsigned long newDist;
-unsigned long deltaTicks;
-unsigned long targetTicks;
-// Left and right encoder ticks for turning
-volatile unsigned long leftForwardTicksTurns;
-volatile unsigned long rightForwardTicksTurns;
-volatile unsigned long leftReverseTicksTurns;
-volatile unsigned long rightReverseTicksTurns;
 /*
  *
  * Alex Communication Routines.
