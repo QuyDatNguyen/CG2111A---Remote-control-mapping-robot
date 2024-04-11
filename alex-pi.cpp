@@ -298,6 +298,7 @@ int main()
 					continue;
 				}
 				params[i] = params[i] * 10 + *p - '0';
+				printf("params[%d] = %d\n", i, params[i]);
 			}
 			printf("Command: %c, Distance: %d, Power: %d\n", ch, params[0], params[1]);
 
