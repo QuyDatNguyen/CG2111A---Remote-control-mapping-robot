@@ -97,7 +97,7 @@ void right(float ang, float speed)
   else
     deltaTicks = computeDeltaTicks(ang);
 
-  targetTicks = rightReverseTicksTurns + deltaTicks;
+  targetTicks = leftReverseTicksTurns + deltaTicks;
   cw(ang, speed);
 }
 /*
