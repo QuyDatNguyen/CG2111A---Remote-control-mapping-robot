@@ -50,8 +50,8 @@ volatile unsigned long rightReverseTicksTurns;
 #define ALEX_LENGTH 13
 #define ALEX_BREADTH 13
 #define PI 3.141592654
-float alexDiagonal = 0.0;
-float alexCirc = 0.0;
+volatile float alexDiagonal = 0.0;
+volatfloat alexCirc = 0.0;
 /*
  *    Alex's State Variables
  */
@@ -695,12 +695,12 @@ void loop()
       stop();
     }
   }
-  if (targetTicks > 0)
+  if (deltaTicks > 0)
   {
     // dbprintf("TARGET TICKS: %d\n", targetTicks);
     if (dir == LEFT)
     {
-      if (leftReverseTicksTurns >= targetTicks)
+      if (leftReverseTilcksTurns >= targetTicks)
       {
         deltaTicks = 0;
         targetTicks = 0;
