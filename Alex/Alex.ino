@@ -694,6 +694,7 @@ void loop()
   }
   if (deltaTicks > 0)
   {
+    dbprintf("TARGET TICKS: %d\n", targetTicks);
     if (dir == LEFT)
     {
       if (leftReverseTicksTurns >= targetTicks)
