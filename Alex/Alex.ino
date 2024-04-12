@@ -695,7 +695,7 @@ void loop()
       stop();
     }
   }
-  if (deltaTicks > 0)
+  if (targetTicks > 0)
   {
     // dbprintf("TARGET TICKS: %d\n", targetTicks);
     if (dir == LEFT)
