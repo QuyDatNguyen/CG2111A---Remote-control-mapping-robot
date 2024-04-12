@@ -158,6 +158,7 @@ void sendStatus()
   messagePacket.params[7] = rightReverseTicksTurns;
   messagePacket.params[8] = forwardDist;
   messagePacket.params[9] = reverseDist;
+  messagePacket.params[10] = targetTicks;
 
   sendResponse(&messagePacket);
 }
@@ -692,9 +693,9 @@ void loop()
       stop();
     }
   }
-  dbprintf("TARGET TICKS: %d\n", targetTicks);
   if (deltaTicks > 0)
   {
+    // dbprintf("TARGET TICKS: %d\n", targetTicks);
     if (dir == LEFT)
     {
       if (leftReverseTicksTurns >= targetTicks)
