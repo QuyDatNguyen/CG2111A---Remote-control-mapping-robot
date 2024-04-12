@@ -160,6 +160,7 @@ void sendStatus()
   messagePacket.params[9] = reverseDist;
   messagePacket.params[10] = targetTicks;
   messagePacket.params[11] = deltaTicks;
+  messagePacket.params[12] = deltaDist;
 
   sendResponse(&messagePacket);
 }
