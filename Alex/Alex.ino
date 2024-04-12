@@ -23,10 +23,10 @@ volatile unsigned long reverseDist;
 // variables to keep track whether we have moved
 // a command distance
 // ref: w9s1 activity 4
-unsigned long deltaDist;
-unsigned long newDist;
-unsigned long deltaTicks;
-unsigned long targetTicks;
+volatile unsigned long deltaDist;
+volatile unsigned long newDist;
+volatile unsigned long deltaTicks;
+volatile unsigned long targetTicks;
 // Left and right encoder ticks for turning
 volatile unsigned long leftForwardTicksTurns;
 volatile unsigned long rightForwardTicksTurns;
@@ -159,6 +159,7 @@ void sendStatus()
   messagePacket.params[8] = forwardDist;
   messagePacket.params[9] = reverseDist;
   messagePacket.params[10] = targetTicks;
+  messagePacket.params[11] = deltaTicks;
 
   sendResponse(&messagePacket);
 }
