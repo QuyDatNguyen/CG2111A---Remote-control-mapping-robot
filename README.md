@@ -17,7 +17,7 @@ ls /dev/ttyACM*
 2. Sync code on the RPi to latest version from GitHub (if needed).
 
 ```sh
-git stash --all && gh repo sync
+git stash --all && gh repo sync && git log -1
 ```
 
 3. Use VNC to compile & upload code to the Arduino. (Sorry I tried to figure out a way to do it with ssh but I cannot figure it out ffs).
@@ -31,7 +31,7 @@ gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
 (Steps 2 to 4 in one command:
 
 ```sh
-git stash --all && gh repo sync && gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
+git stash --all && gh repo sync && git log -1 && gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
 ```
 
 )

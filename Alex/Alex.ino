@@ -166,6 +166,7 @@ void sendMessage(const char *message)
 {
   // Sends text messages back to the Pi. Useful
   // for debugging.
+  dbprintf("SENDING...");
 
   TPacket messagePacket;
   messagePacket.packetType = PACKET_TYPE_MESSAGE;
@@ -181,6 +182,7 @@ void dbprintf(char *format, ...)
   vsprintf(buffer, format, args);
   sendMessage(buffer);
 }
+
 void sendBadPacket()
 {
   // Tell the Pi that it sent us a packet with a bad
@@ -662,7 +664,7 @@ void loop()
   }
   if (deltaDist > 0)
   {
-    Serial.println(newDist);
+    // Serial.println(newDist);
     if (dir == FORWARD)
     {
       if (forwardDist > newDist)
