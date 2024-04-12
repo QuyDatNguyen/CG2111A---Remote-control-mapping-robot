@@ -262,6 +262,7 @@ void enablePullups()
 void leftISR()
 {
 
+  dbprintf("L");
   if (dir == FORWARD)
   {
     leftForwardTicks++;
@@ -285,6 +286,7 @@ void leftISR()
 
 void rightISR()
 {
+  dbprintf("R");
   if (dir == FORWARD)
   {
     rightForwardTicks++;
