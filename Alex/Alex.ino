@@ -325,10 +325,10 @@ void setupEINT()
 ISR(INT3_vect)
 {
   leftISR();
-}
-ISR(INT2_vect)
-{
   rightISR();
+}
+ISR(INT2_vect) // NOT WORKING (PROPERLY)
+{
 }
 /*
  * Setup and start codes for serial communications
