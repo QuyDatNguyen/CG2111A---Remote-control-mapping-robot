@@ -166,7 +166,7 @@ void sendMessage(const char *message)
 {
   // Sends text messages back to the Pi. Useful
   // for debugging.
-  dbprintf("SENDING...");
+  // dbprintf("SENDING...");
 
   TPacket messagePacket;
   messagePacket.packetType = PACKET_TYPE_MESSAGE;
@@ -262,7 +262,7 @@ void enablePullups()
 void leftISR()
 {
 
-  dbprintf("L");
+  dbprintf("L ");
   if (dir == FORWARD)
   {
     leftForwardTicks++;
@@ -286,7 +286,7 @@ void leftISR()
 
 void rightISR()
 {
-  dbprintf("R");
+  dbprintf("R ");
   if (dir == FORWARD)
   {
     rightForwardTicks++;
