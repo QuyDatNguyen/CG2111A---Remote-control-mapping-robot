@@ -51,14 +51,21 @@ void handleStatus(TPacket *packet)
     printf("Delta Dist:\t\t\t%d\n", packet->params[12]);
     printf("\n---------------------------------------\n\n");
 }
+
+// Red:    64
+// Green : 72 Blue : 73
 void handleColor(TPacket *packet)
 {
-    printf("\n ------- COLOR REPORT ------- \n\n");
-    printf("Red:\t%d\n", packet->params[0]);
-    printf("Green:\t%d\n", packet->params[1]);
-    printf("Blue:\t%d\n", packet->params[2]);
+    // printf("\n ------- COLOR REPORT ------- \n\n");
+    int rgb[3];
+    rgb[0] = map(packet->params[0], 25, 96, 255, 0);
+    rgb[1] = map(packet->params[1], 25, 96, 255, 0);
+    rgb[2] = map(packet->params[2], 25, 96, 255, 0);
+    // printf("Red:\t%d\n", packet->params[0]);
+    // printf("Green:\t%d\n", packet->params[1]);
+    // printf("Blue:\t%d\n", packet->params[2]);
 
-    printf("\033[48;2;%d;%d;%dm        \033[m\n", 23, 198, 220);
+    printf("Detected Color: \033[48;2;%d;%d;%dm\t%3d\t%3d\t%3d\033[m\n", rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2]);
 }
 
 void handleResponse(TPacket *packet)
