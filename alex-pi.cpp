@@ -9,7 +9,8 @@
 #include "serialize.h"
 #include "constants.h"
 
-#define PORT_NAME "/dev/ttyACM1"
+// #define PORT_NAME "/dev/ttyACM1"
+#define PORT_NAME_WITHOUT_NUM "/dev/ttyACM"
 #define BAUD_RATE B9600
 
 int exitFlag = 0;
@@ -247,6 +248,17 @@ void sendCommand(char command)
 
 int main()
 {
+    char portNumber;
+    printf("Enter the port number of the Arduino (e.g. 0 for /dev/ttyACM0)\n");
+    scanf("%c", &portNumber);
+    flushInput();
+
+    // Construct the port name
+    char PORT_NAME[20];
+    sprintf(PORT_NAME, "%s%c", PORT_NAME_WITHOUT_NUM, portNumber);
+
+    printf("PORT_NAME: %s\nConnecting...", PORT_NAME);
+
     // Connect to the Arduino
     startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 5);
 
