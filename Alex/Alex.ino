@@ -51,30 +51,32 @@ volatile unsigned long rightReverseTicksTurns;
 #define ALEX_BREADTH 13
 #define PI 3.141592654
 volatile float alexDiagonal = 0.0;
-volatfloat alexCirc = 0.0;
+volatile float alexCirc = 0.0;
 /*
  *    Alex's State Variables
  */
 
 // Colour sensor
-// #define S0 4
-// #define S1 5
-// #define S2 6
-// #define S3 7
-// #define sensorOut 8
+// using Port L
+#define S0 (1 << 6)  // PL6
+#define S1 (1 << 7)  // PL7
+#define S2 (1 << 1)  // PL1
+#define S3 (1 << 0)  // PL0
+#define sensorOut 37 // PL2
 // pins must be changed according to the arduino pins we use
 
-// int frequency = 0;
-//  #define RED_ARR = {255, 0, 0};
-//  #define GRE_ARR = {0, 255, 0};
-//  #define WHITE_ARR = {255, 255, 255};
-//  #define NUMBCOL = 3 //number of colour to detect
-//  static int allColourArray[NUMCOL][3] = {WHI_ARR, RED_ARR, GRE_ARR};
+int frequency = 0;
+#define RED_ARR = {255, 0, 0};
+#define GRE_ARR = {0, 255, 0};
+#define WHITE_ARR = {255, 255, 255};
+#define NUMBCOL = 3 // number of colour to detect
+static int allColourArray[NUMCOL][3] = {WHI_ARR, RED_ARR, GRE_ARR};
 //  0-White; 1-RED; 2-GREEN
 // change all these values after calibration
-// int low_map[3] = {0, 0, 0);
-// int high_map[3] = {0, 0, 0};
+int low_map[3] = {0, 0, 0);
+int high_map[3] = {0, 0, 0};
 // used for mapping [0]-red, [1]-green, [2]-blue
+
 unsigned long computeDeltaTicks(float ang)
 {
   unsigned long ticks = (unsigned long)((ang * alexCirc * COUNTS_PER_REV) / (360.0 * WHEEL_CIRC));
@@ -177,6 +179,7 @@ void sendMessage(const char *message)
   sendResponse(&messagePacket);
 }
 
+// using this usually causes bad magic number -> you CAN use it to find out if the code is reaching somewhere lmao
 void dbprintf(char *format, ...)
 {
   va_list args;
@@ -332,7 +335,9 @@ ISR(INT3_vect)
 }
 ISR(INT2_vect) // NOT WORKING (PROPERLY)
 {
+  // right is moved up to the left side for now LMAO
 }
+
 /*
  * Setup and start codes for serial communications
  *
@@ -440,95 +445,73 @@ void clearOneCounter(int which)
 
   // clearCounters();
 }
+// ultrasonic sensor setup
+void setupUltraSensor()
+{
+}
 // colour sensor setup
 
 // Intialize Alex's internal states
-// void setupcolour() {
-//  pinMode(S0, OUTPUT);
-//  pinMode(S1, OUTPUT);
-//  pinMode(S2, OUTPUT);
-//  pinMode(S3, OUTPUT);
-//  pinMode(sensorOut, INPUT);
-//
-//  // Setting frequency-scaling to 20%
-//  digitalWrite(S0,HIGH);
-//  digitalWrite(S1,LOW);
-//
-//  Serial.begin(9600); //for testing
-//}
-// int getAvgReading(int times, int low_map, int high_map) {
-//   int reading = 0;
-//   int total = 0;
-//   for (int i = 0; i < times; i ++) {
-//     reading = pulseIn(sensorOut, LOW);
-//     reading = map(reading, high_map, low_map, 255, 0);
-//     total += reading;
-//     delay(50);
-//   }
-//   return total/times;
-// }
-/**
-void on_colour(int colour) {
-  //change to read Red value
-  if (colour == 0) {
-    digitalWrite(S2, LOW);
-    digitalWrite(S3, LOW);
-    delay(RGBWait);
-  }
-  //change to read Green value
-  if (colour == 1) {
-    digitalWrite(S2, HIGH);
-    digitalWrite(S3, HIGH);
-    delay(RGBWait);
-  }
-  if (colour == 2) {
-    digitalWrite(S2, LOW);
-    digitalWrite(S3, HIGH);
-    delay(RGBWait);
-  }
+void setupcolour()
+{
+
+  DDRL = (((S0) | (S1)) | ((S2) | (S3)));
+  // setting S0, S1, S2 and S3 pins as input/output
+
+  // setting freq scaling to 20%
+  PORTL = ((S0) & ~(S1));
+  // setting S0 as HIGH and S1 as LOW
 }
-//function to clear filter on colour sensor, i.e to not read any value
-void off_colour() {
-  digitalWrite(S2, HIGH);
-  digitalWrite(S3, LOW);
+
+void sendColor()
+{
+
+  TPacket messagePacket;
+  messagePacket.packetType = PACKET_TYPE_RESPONSE;
+  messagePacket.command = RESP_COLOR;
+
+  // setting RED filtered photodiodes to be read
+  // setting S2 and S3 to LOW
+  PORTL &= (~(S2) & (~S3));
   delay(RGBWait);
+  colorR = getAvgReading(5);
+
+  // setting GREEN filtered photodiodes to be read
+  // setting S2 and S3 to HIGH
+  PORTL |= ((S2) | (S3));
+  delay(RGBWait);
+  colorG = getAvgReading(5);
+
+  // setting BLUE filtered photodiodes to be read
+  // setting S2 to LOW and S3 to HIGH
+  PORTL &= (~(S2));
+  PORTL |= (S3);
+  delay(RGBWait);
+  colorB = getAvgReading(5);
+
+  messagePacket.params[0] = colorR;
+  messagePacket.params[1] = colorG;
+  messagePacket.params[2] = colorB;
+
+  sendResponse(&messagePacket);
 }
-int getColour() {
-  for (int c = 0; c < 3; c ++) {
-    if (SERIAL_MONITOR_ON) {
-      Serial.print(colourStr[c]);
-    }
-    on_colour(c);
-    colourArray[c] = getAvgReading(5, low_map[c], high_map[c]);
 
-    off_colour();
-
-    if (SERIAL_MONITOR_ON) {
-      Serial.println(int(colourArray[c])); //show the value for the current colour LED, which corresponds to either the R, G or B of the RGB code
-    }
+int getAvgReading(int times)
+{
+  // props for when we do mapping:
+  // , int low_map, int high_map
+  int reading = 0;
+  int total = 0;
+  for (int i = 0; i < times; i++)
+  {
+    reading = pulseIn(sensorOut, LOW);
+    // reading = map(reading, high_map, low_map, 255, 0);
+    total += reading;
+    delay(50);
   }
-  int colour = -1;
-  int min_dist = MIN_DIST;
-  long long curr_dist;
-
-  // compare the normalised colour values to the values we detected. Find the smallest difference and then determine the colour based off the smallest distance.
-  for (int i = 0; i < 3; i ++) {
-    curr_dist = 0;
-    // Takes the sum of square values of difference between current colour detected
-    // and reference values saved in allColourArray
-
-    for (int j = 0; j < 3; j++) {
-      curr_dist += (allColourArray[i][j] - colourArray[j])*(allColourArray[i][j] - colourArray[j]);
-    }
-    if (curr_dist < min_dist && curr_dist > 0) {
-      colour = i;
-      min_dist = curr_dist;
-    }
-  }
-  Serial.println(colour);
-  return colour;
+  return total / times;
 }
-*/
+
 void initializeState()
 {
   clearCounters();
@@ -566,6 +549,10 @@ void handleCommand(TPacket *command)
   case COMMAND_CLEAR_STATS:
     sendOK();
     clearOneCounter((int)command->params[0]);
+    break;
+  case COMMAND_GET_COLOUR:
+    sendOK();
+    sendColor();
     break;
   default:
     sendBadCommand();
@@ -700,7 +687,7 @@ void loop()
     // dbprintf("TARGET TICKS: %d\n", targetTicks);
     if (dir == LEFT)
     {
-      if (leftReverseTilcksTurns >= targetTicks)
+      if (leftReverseTicksTurns >= targetTicks)
       {
         deltaTicks = 0;
         targetTicks = 0;

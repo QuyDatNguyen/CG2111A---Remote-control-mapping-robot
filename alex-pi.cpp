@@ -235,13 +235,11 @@ void sendCommand(char command)
     case 'Q':
         exitFlag = 1;
         break;
-    /**
     case 'd':
     case 'D':
         commandPacket.command = COMMAND_GET_COLOUR;
         sendPacket(&commandPacket);
         break;
-    */
     default:
         printf("Bad command\n");
     }
