@@ -463,10 +463,9 @@ int readUltrasonic()
 {
   delay(2);
   PORTL |= TRIG; // set HIGH
-  delay(10);
-  PORTL &= ~TRIG; // set LOW
-  delayMicroseconds(500);
-  unsigned long duration = pulseIn(47, HIGH, TIMEOUT);   // read pulse
+  delayMicroseconds(10);
+  PORTL &= ~TRIG;                                        // set LOW
+  unsigned long duration = pulseIn(47, HIGH, 1e4);       // read pulse
   double dist = ((double)duration) / 2 * SPEED_OF_SOUND; // convert to mms
   // return dist;
   return (int)dist;
