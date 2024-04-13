@@ -60,8 +60,8 @@ volatile float alexCirc = 0.0;
 // using Port C
 #define COLOR_SENSOR_S0 (1 << 3) // PC3, Pin 34
 #define COLOR_SENSOR_S1 (1 << 4) // PC4, Pin 33
-#define COLOR_SENSOR_S2 (1 << 1) // PC1, Pin 36
-#define COLOR_SENSOR_S3 (1 << 2) // PC2, Pin 35
+#define COLOR_SENSOR_S2 (1 << 2) // PC2, Pin 35
+#define COLOR_SENSOR_S3 (1 << 1) // PC1, Pin 36
 #define COLOR_SENSOR_OUTPUT 37   // (PC0, Pin 37)
 // pins must be changed according to the arduino pins we use
 
