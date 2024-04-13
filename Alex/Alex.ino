@@ -497,6 +497,17 @@ void setupcolour()
   // setting freq scaling to 20%: S0 as HIGH and S1 as LOW
   PORTC &= ~COLOR_SENSOR_S0;
   PORTC |= COLOR_SENSOR_S1;
+
+  // turn off power reduction register for adc
+  PRR0 &= ~0b00000001;
+
+  // turn on ADCSRA
+  // set prescaler to 32
+  ADCSRA = 0b10000101;
+
+  // set reference voltages to be AREF
+  ADMUX = 0b01000000;
+  ADCSRB |= 0b00001000;
 }
 
 int getAvgReading(int times)
@@ -507,8 +518,15 @@ int getAvgReading(int times)
   for (int i = 0; i < times; i++)
   {
     // wait until COLOR_SENSOR_OUTPUT is high
-    pulseIn(COLOR_SENSOR_OUTPUT, HIGH);
-    reading = pulseIn(COLOR_SENSOR_OUTPUT, LOW);
+    // pulseIn(COLOR_SENSOR_OUTPUT, HIGH);
+    // reading = pulseIn(COLOR_SENSOR_OUTPUT, LOW);
+
+    ADCSRA |= 0b01000000;
+    while (ADCSRA & 0b01000000)
+      ;
+    int low = ADCL;
+    int high = ADCH;
+    reading = (high << 8) | low;
     // reading = map(reading, high_map, low_map, 255, 0);
     total += reading;
     delay(20);
