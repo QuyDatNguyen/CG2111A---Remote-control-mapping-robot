@@ -68,7 +68,7 @@ volatile float alexCirc = 0.0;
 // ultrasonic sensor
 #define TRIG (1 << 3)        // PL3, PIN 46
 #define ECHO (1 << 2)        // PL2, PIN 47
-#define SPEED_OF_SOUND 0.345 // (cm/microseconds)
+#define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1500         // Max microseconds to wait; choose according to max distance of wall
 
 // int frequency = 0;
