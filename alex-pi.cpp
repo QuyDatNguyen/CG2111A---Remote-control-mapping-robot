@@ -70,7 +70,9 @@ void handleColor(TPacket *packet)
     // printf("Green:\t%d\n", packet->params[1]);
     // printf("Blue:\t%d\n", packet->params[2]);
 
-    printf("Detected Color: \033[38;2;%d;%d;%dm██████\033[m\n %3d,%3d,%3d", rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2]);
+    printf("Detected Color: \033[38;2;%d;%d;%dm██████\033[m\n %3d,%3d,%3d [raw: %3d, %3d, %3d]",
+           rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2],
+           packet->params[0], packet->params[1], packet->params[2]);
 }
 
 void handleDistance(TPacket *packet)
