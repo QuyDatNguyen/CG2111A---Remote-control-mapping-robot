@@ -83,7 +83,7 @@ void handleDistance(TPacket *packet)
     int distance = packet->params[0];
     int distanceInCm = distance / 10;
 
-    printf("\n      \\    /\\n       )  ( ')\n      (  /  )\njgs    \\(__)|");
+    printf("\n      \\    /\\\n       )  ( ')\n      (  /  )\njgs    \\(__)|");
     for (int i = 0; i < 20; i++)
     {
         if (i < distanceInCm)
