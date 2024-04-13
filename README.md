@@ -3,6 +3,7 @@
 SSH into the robot, and cd to `~/cg2111a/Desktop/cg2111a_git`!
 
 ```sh
+ssh pi@raspberrypi.local
 cd ~/cg2111a/Desktop/cg2111a_git
 ```
 
@@ -20,7 +21,7 @@ ls /dev/ttyACM*
 git stash --all && gh repo sync && git log -1
 ```
 
-3. Use VNC to compile & upload code to the Arduino. The folder with the .ino file is pinned in the sidebar, so you can just open it directly.
+3. Use VNC to compile & upload code to the Arduino. The ino file is on the desktop, you can just open it. (Ignore the warning about making a folder, it will open normally)
 <!--  (Sorry I tried to figure out a way to do it with ssh but I cannot figure it out ffs). -->
 
 4. Run code for RPi side (and pray it works).
