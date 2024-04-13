@@ -51,6 +51,15 @@ void handleStatus(TPacket *packet)
     printf("Delta Dist:\t\t\t%d\n", packet->params[12]);
     printf("\n---------------------------------------\n\n");
 }
+void handleColor(TPacket *packet)
+{
+    printf("\n ------- COLOR REPORT ------- \n\n");
+    printf("Red:\t%d\n", packet->params[0]);
+    printf("Green:\t%d\n", packet->params[1]);
+    printf("Blue:\t%d\n", packet->params[2]);
+
+    printf("\033 [48;2;%d;%d;%d        \n", 23, 198, 220);
+}
 
 void handleResponse(TPacket *packet)
 {
@@ -63,6 +72,9 @@ void handleResponse(TPacket *packet)
 
     case RESP_STATUS:
         handleStatus(packet);
+        break;
+    case RESP_COLOR:
+        handleColor(packet);
         break;
 
     default:
@@ -263,9 +275,10 @@ int main()
     startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 5);
 
     // Sleep for two seconds
-    printf("WAITING TWO SECONDS FOR ARDUINO TO REBOOT\n");
+    printf("Connected! (hopefully)\n");
+    printf("Waiting 2 seconds for Arduino to reboot... ");
     sleep(2);
-    printf("DONE\n");
+    printf("Done!\n");
 
     // Spawn receiver thread
     pthread_t recv;
