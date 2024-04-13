@@ -4,10 +4,10 @@
 #include <semaphore.h>
 #include <unistd.h>
 #include <stdint.h>
-#include "packet.h"
+#include "Alex/packet.h"
+#include "Alex/constants.h"
 #include "serial.h"
 #include "serialize.h"
-#include "constants.h"
 
 // #define PORT_NAME "/dev/ttyACM1"
 #define PORT_NAME_WITHOUT_NUM "/dev/ttyACM"
