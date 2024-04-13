@@ -65,17 +65,23 @@ volatile float alexCirc = 0.0;
 #define sensorOut 37 // PL2
 // pins must be changed according to the arduino pins we use
 
-int frequency = 0;
-#define RED_ARR = {255, 0, 0};
-#define GRE_ARR = {0, 255, 0};
-#define WHITE_ARR = {255, 255, 255};
-#define NUMBCOL = 3 // number of colour to detect
-static int allColourArray[NUMCOL][3] = {WHI_ARR, RED_ARR, GRE_ARR};
-//  0-White; 1-RED; 2-GREEN
-// change all these values after calibration
-int low_map[3] = {0, 0, 0);
-int high_map[3] = {0, 0, 0};
-// used for mapping [0]-red, [1]-green, [2]-blue
+// ultrasonic sensor
+#define TRIG (1 << 3)      // PD3, PIN 46
+#define ECHO (1 << 4)      // PB6, PIN 47
+#define SPEED_OF_SOUND 340 // (m/s)
+#define TIMEOUT 1500       // Max microseconds to wait; choose according to max distance of wall
+
+// int frequency = 0;
+// #define RED_ARR = {255, 0, 0};
+// #define GRE_ARR = {0, 255, 0};
+// #define WHITE_ARR = {255, 255, 255};
+// #define NUMBCOL = 3 // number of colour to detect
+// static int allColourArray[NUMCOL][3] = {WHI_ARR, RED_ARR, GRE_ARR};
+// //  0-White; 1-RED; 2-GREEN
+// // change all these values after calibration
+// int low_map[3] = {0, 0, 0);
+// int high_map[3] = {0, 0, 0};
+// // used for mapping [0]-red, [1]-green, [2]-blue
 
 unsigned long computeDeltaTicks(float ang)
 {
@@ -446,16 +452,44 @@ void clearOneCounter(int which)
   // clearCounters();
 }
 // ultrasonic sensor setup
-void setupUltraSensor()
+void setupUltrasonic()
 {
+  DDRD |= TRIG; // set PB5 as trigger pin (output)
+  DDRD &= ~ECHO // set PB6 as echo pin (input)
 }
+float readUltrasonic()
+{
+  PORTD &= ~TRIG; // set LOW
+  delay(2);
+  PORTD |= TRIG; // set HIGH
+  delay(10);
+  PORTD &= ~TRIG; // set LOW
+  delay(10);
+  long duration = pulseIn(ECHO, HIGH, TIMEOUT);
+  float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get cm value
+  return dist;
+}
+
+void sendDistance()
+{
+  TPacket messagePacket;
+  messagePacket.packetType = PACKET_TYPE_RESPONSE;
+  messagePacket.command = RESP_IR_DISTANCE;
+
+  int distance = readUltrasonic();
+
+  messagePacket.params[0] = distance;
+
+  sendResponse(&messagePacket);
+}
+
 // colour sensor setup
 
 // Intialize Alex's internal states
 void setupcolour()
 {
 
-  DDRL = (((S0) | (S1)) | ((S2) | (S3)));
+  DDRL |= (((S0) | (S1)) | ((S2) | (S3)));
   // setting S0, S1, S2 and S3 pins as input/output
 
   // setting freq scaling to 20%
@@ -463,8 +497,25 @@ void setupcolour()
   // setting S0 as HIGH and S1 as LOW
 }
 
+int getAvgReading(int times)
+{
+  // props for when we do mapping:
+  // , int low_map, int high_map
+  int reading = 0;
+  int total = 0;
+  for (int i = 0; i < times; i++)
+  {
+    reading = pulseIn(sensorOut, LOW);
+    // reading = map(reading, high_map, low_map, 255, 0);
+    total += reading;
+    delay(50);
+  }
+  return total / times;
+}
+
 void sendColor()
 {
+  int colorR, colorB, colorB;
 
   TPacket messagePacket;
   messagePacket.packetType = PACKET_TYPE_RESPONSE;
@@ -496,20 +547,13 @@ void sendColor()
   sendResponse(&messagePacket);
 }
 
-int getAvgReading(int times)
+void sendTooClose()
 {
-  // props for when we do mapping:
-  // , int low_map, int high_map
-  int reading = 0;
-  int total = 0;
-  for (int i = 0; i < times; i++)
-  {
-    reading = pulseIn(sensorOut, LOW);
-    // reading = map(reading, high_map, low_map, 255, 0);
-    total += reading;
-    delay(50);
-  }
-  return total / times;
+  TPacket messagePacket;
+  messagePacket.packetType = PACKET_TYPE_RESPONSE;
+  messagePacket.command = RESP_TOO_CLOSE;
+
+  sendResponse(&messagePacket);
 }
 
 void initializeState()
@@ -654,6 +698,18 @@ void loop()
   {
     sendBadChecksum();
   }
+  // if get too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks
+  float dist = readUltrasonic();
+  if (dist > 0 && dist < 5)
+  {
+    deltaDist = 0;
+    newDist = 0;
+    deltaTicks = 0;
+    targetTicks = 0;
+    sendTooClose();
+    stop();
+  }
+  // to track movement
   if (deltaDist > 0)
   {
     // Serial.println(newDist);
@@ -682,6 +738,7 @@ void loop()
       stop();
     }
   }
+
   if (deltaTicks > 0)
   {
     // dbprintf("TARGET TICKS: %d\n", targetTicks);
