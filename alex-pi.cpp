@@ -70,7 +70,12 @@ void handleColor(TPacket *packet)
     // printf("Green:\t%d\n", packet->params[1]);
     // printf("Blue:\t%d\n", packet->params[2]);
 
-    printf("Detected Color: \033[48;2;%d;%d;%dm\t%3d\t%3d\t%3d\033[m\n", rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2]);
+    printf("Detected Color: \033[38;2;%d;%d;%dm██████\033[m\n %3d,%3d,%3d", rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2]);
+}
+
+void handleDistance(TPacket *packet)
+{
+    printf("Detected distance: %d cm\n", packet->params[0]);
 }
 
 void handleResponse(TPacket *packet)
@@ -90,6 +95,9 @@ void handleResponse(TPacket *packet)
         break;
     case RESP_TOO_CLOSE:
         printf("Stopped because too close!\n");
+        break;
+    case RESP_IR_DISTANCE:
+        handleDistance(packet);
         break;
 
     default:

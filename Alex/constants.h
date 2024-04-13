@@ -28,6 +28,7 @@ typedef enum
   RESP_BAD_RESPONSE = 5,
   RESP_COLOR = 6,
   RESP_TOO_CLOSE = 7,
+  RESP_IR_DISTANCE = 8,
 } TResponseType;
 
 // Commands
