@@ -52,6 +52,11 @@ void handleStatus(TPacket *packet)
     printf("\n---------------------------------------\n\n");
 }
 
+int map(int value, int fromLow, int fromHigh, int toLow, int toHigh)
+{
+    return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
+}
+
 // Red:    64
 // Green : 72 Blue : 73
 void handleColor(TPacket *packet)
