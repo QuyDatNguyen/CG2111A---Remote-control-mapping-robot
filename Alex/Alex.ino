@@ -466,7 +466,7 @@ int readUltrasonic()
   PORTD &= ~TRIG; // set LOW
   delay(10);
   int duration = pulseIn(ECHO, HIGH, 10000);
-  float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
+  float dist = ((float)duration) / 2.0 / 1 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
   // return dist;
   return duration;
 }
