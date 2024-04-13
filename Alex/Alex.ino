@@ -41,7 +41,7 @@ volatile unsigned long rightReverseTicksTurns;
 // Wheel circumference in cm.
 // We will use this to calculate forward/backward distance traveled
 // by taking revs * WHEEL_CIRC
-#define RGBWait 300 // in milisecs
+#define RGBWait 1000 // in milisecs
 /*
  * Alex's configuration constants
  */
@@ -69,7 +69,8 @@ volatile float alexCirc = 0.0;
 #define TRIG (1 << 3)        // PL3, PIN 46
 #define ECHO (1 << 2)        // PL2, PIN 47
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
-#define TIMEOUT 1500         // Max microseconds to wait; choose according to max distance of wall
+#define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
+#define GAP_FROM_FRONT 35    // gap between sensor and front of the robot, in mm
 
 // int frequency = 0;
 // #define RED_ARR = {255, 0, 0};
@@ -464,9 +465,10 @@ int readUltrasonic()
   delay(2);
   PORTL |= TRIG; // set HIGH
   delayMicroseconds(10);
-  PORTL &= ~TRIG;                                        // set LOW
-  unsigned long duration = pulseIn(47, HIGH, 1e4);       // read pulse
-  double dist = ((double)duration) / 2 * SPEED_OF_SOUND; // convert to mms
+  PORTL &= ~TRIG; // set LOW
+
+  unsigned long duration = pulseIn(47, HIGH, TIMEOUT);                      // read pulse length in us
+  double dist = (((double)duration) / 2 * SPEED_OF_SOUND) - GAP_FROM_FRONT; // convert to mms
   // return dist;
   return (int)dist;
 }
