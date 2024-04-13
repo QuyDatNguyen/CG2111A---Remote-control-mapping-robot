@@ -40,6 +40,7 @@ git stash --all && gh repo sync && git log -1 && gcc alex-pi.cpp serial.cpp seri
 - Check if the port is defined correctly! Sometimes its not ttyACM0
 - Anything else ask me (kyuu)
 # ROS Networking
+If you attempt to install from the scratch, it will be very time consuming (literally 1 hour or even more). I suggest install Ubuntu and proceed step 1, 3.1 Creating New Workspace and Building at home first.
 Before attempt to do ROS Networking, remember to ensure at least you can run SLAM as tutorial 3 (otherwise there is high chance there may be hardware problem :)))
 https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
 1. Set up ROS on your PC: Follow this step on tutorial 4.
@@ -57,8 +58,8 @@ https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
      rostopic get info
      If you see "no subscribers", there may actually be some problems relating to VM or MAC that neither me or prof can explain yet :))). What I suggest is to follow step 5 of tutorial to set up our PC as Master instead (what im doing actually)
      - However, ensure you at least have installed workspace and Hector_slam on your PC first. Follow "3.1 Creating a New Workspace and Building"
-    4. Visualize Mapping Data Using Python on PC: This is optional, I have not done this yet
-    5. Visualize Mapping Data Using RViz on PC. Just follow it. You may want to install ros-noectis-hector-slam on your PC as well (just check if you have not installed yet. Below is the code for installation)
+  4. Visualize Mapping Data Using Python on PC: This is optional, I have not done this yet
+  5. Visualize Mapping Data Using RViz on PC. Follow this if you want to set your PC as the master. Just follow it. You may want to install ros-noectis-hector-slam on your PC as well (just check if you have not installed yet. Below is the code for installation)
        sudo apt-get install ros-noetic-hector-slam
 Additionally, when running rViz, having the pointing arrow will help a lot in detecting direction. Can see how to add this feature in Tutorial 3.
 If there are any problems, may consider to ask me or Prof. 
