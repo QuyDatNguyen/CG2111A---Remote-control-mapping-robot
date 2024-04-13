@@ -21,7 +21,7 @@ ls /dev/ttyACM*
 git stash --all && gh repo sync && git log -1
 ```
 
-3. Use VNC to compile & upload code to the Arduino. The ino file is on the desktop, you can just open it. (Ignore the warning about making a folder, it will open normally)
+3. Use VNC to compile & upload code to the Arduino. The ino file is on the desktop, you can just open it. (Ignore the warning about making a folder by clicking `Cancel` -> `Ok`, it will open normally)
 <!--  (Sorry I tried to figure out a way to do it with ssh but I cannot figure it out ffs). -->
 
 4. Run code for RPi side (and pray it works).
