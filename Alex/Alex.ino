@@ -58,16 +58,16 @@ volatile float alexCirc = 0.0;
 
 // Colour sensor
 // using Port C
-#define COLOR_SENSOR_S0 (1 << 3) // PC3
-#define COLOR_SENSOR_S1 (1 << 4) // PC4
-#define COLOR_SENSOR_S2 (1 << 1) // PC1
-#define COLOR_SENSOR_S3 (1 << 2) // PC2
-#define COLOR_SENSOR_OUTPUT 37   // (PC0)
+#define COLOR_SENSOR_S0 (1 << 3) // PC3, Pin 34
+#define COLOR_SENSOR_S1 (1 << 4) // PC4, Pin 33
+#define COLOR_SENSOR_S2 (1 << 1) // PC1, Pin 36
+#define COLOR_SENSOR_S3 (1 << 2) // PC2, Pin 35
+#define COLOR_SENSOR_OUTPUT 37   // (PC0, Pin 37)
 // pins must be changed according to the arduino pins we use
 
 // ultrasonic sensor
-#define TRIG (1 << 3)      // PD3, PIN 46
-#define ECHO (1 << 4)      // PD4, PIN 47
+#define TRIG (1 << 3)      // PL3, PIN 46
+#define ECHO (1 << 2)      // PL2, PIN 47
 #define SPEED_OF_SOUND 340 // (m/s)
 #define TIMEOUT 1500       // Max microseconds to wait; choose according to max distance of wall
 
@@ -454,18 +454,18 @@ void clearOneCounter(int which)
 // ultrasonic sensor setup
 void setupUltrasonic()
 {
-  DDRD |= TRIG;  // set PB5 as trigger pin (output)
-  DDRD &= ~ECHO; // set PB6 as echo pin (input)
+  DDRL |= TRIG;  // set PB5 as trigger pin (output)
+  DDRL &= ~ECHO; // set PB6 as echo pin (input)
 }
 int readUltrasonic()
 {
-  PORTD &= ~TRIG; // set LOW
+  PORTL &= ~TRIG; // set LOW
   delay(2);
-  PORTD |= TRIG; // set HIGH
+  PORTL |= TRIG; // set HIGH
   delay(10);
-  PORTD &= ~TRIG; // set LOW
+  PORTL &= ~TRIG; // set LOW
   delay(10);
-  int duration = pulseIn(ECHO, HIGH);
+  int duration = pulseIn(47, HIGH);
   float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
   // return dist;
   return duration;
@@ -657,7 +657,7 @@ void setup()
   enablePullups();
   initializeState();
   sei();
-  Serial.begin(9600);
+  // Serial.begin(9600);
 }
 
 void handlePacket(TPacket *packet)
