@@ -78,6 +78,7 @@ void handleColor(TPacket *packet)
 void handleDistance(TPacket *packet)
 {
     printf("Detected distance: %d mm\n", packet->params[0]);
+    printf("Magic number: %d\n", packet->params[1]);
 }
 
 void handleResponse(TPacket *packet)
@@ -291,7 +292,7 @@ void sendCommand(char command)
 int main()
 {
     char portNumber;
-    printf("3.Go compile and run the code on the Arduino. The file is linked on the desktop.\n4. Enter the port number of the Arduino (from step 1): /dev/ttyACM");
+    printf("4. Enter the port number of the Arduino (from step 1): /dev/ttyACM");
     scanf("%c", &portNumber);
     flushInput();
 

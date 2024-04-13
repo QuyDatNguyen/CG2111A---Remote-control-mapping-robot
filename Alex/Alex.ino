@@ -66,10 +66,10 @@ volatile float alexCirc = 0.0;
 // pins must be changed according to the arduino pins we use
 
 // ultrasonic sensor
-#define TRIG (1 << 3)      // PL3, PIN 46
-#define ECHO (1 << 2)      // PL2, PIN 47
-#define SPEED_OF_SOUND 340 // (m/s)
-#define TIMEOUT 1500       // Max microseconds to wait; choose according to max distance of wall
+#define TRIG (1 << 3)          // PL3, PIN 46
+#define ECHO (1 << 2)          // PL2, PIN 47
+#define SPEED_OF_SOUND 0.00345 // (cm/microseconds)
+#define TIMEOUT 1500           // Max microseconds to wait; choose according to max distance of wall
 
 // int frequency = 0;
 // #define RED_ARR = {255, 0, 0};
@@ -457,18 +457,19 @@ void setupUltrasonic()
   DDRL |= TRIG;  // set PB5 as trigger pin (output)
   DDRL &= ~ECHO; // set PB6 as echo pin (input)
 }
+
+// Reads the ultrasonic sensor and returns the distance in mms
 int readUltrasonic()
 {
-  PORTL &= ~TRIG; // set LOW
   delay(2);
   PORTL |= TRIG; // set HIGH
   delay(10);
   PORTL &= ~TRIG; // set LOW
-  delay(10);
-  int duration = pulseIn(47, HIGH, TIMEOUT);
-  float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
+
+  unsigned long duration = pulseIn(47, HIGH, TIMEOUT);   // read pulse
+  double dist = ((double)duration) / 2 * SPEED_OF_SOUND; // convert to mms
   // return dist;
-  return duration;
+  return (int)dist;
 }
 
 void sendDistance()
@@ -477,9 +478,10 @@ void sendDistance()
   messagePacket.packetType = PACKET_TYPE_RESPONSE;
   messagePacket.command = RESP_IR_DISTANCE;
 
-  int distance = readUltrasonic() * 10; // convert to mm
+  int distance = readUltrasonic(); // convert to mm
 
   messagePacket.params[0] = distance; // printing value will be in mm
+  messagePacket.params[1] = 1225;     // printing value will be in mm
 
   sendResponse(&messagePacket);
 }
