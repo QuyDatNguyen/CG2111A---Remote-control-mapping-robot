@@ -457,7 +457,7 @@ void setupUltrasonic()
   DDRD |= TRIG;  // set PB5 as trigger pin (output)
   DDRD &= ~ECHO; // set PB6 as echo pin (input)
 }
-float readUltrasonic()
+int readUltrasonic()
 {
   PORTD &= ~TRIG; // set LOW
   delay(2);
@@ -465,9 +465,10 @@ float readUltrasonic()
   delay(10);
   PORTD &= ~TRIG; // set LOW
   delay(10);
-  long duration = pulseIn(ECHO, HIGH, TIMEOUT);
+  int duration = pulseIn(ECHO, HIGH, TIMEOUT);
   float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
-  return dist;
+  // return dist;
+  return duration
 }
 
 void sendDistance()
@@ -601,6 +602,7 @@ void handleCommand(TPacket *command)
   case COMMAND_GET_IR:
     sendOK();
     sendDistance();
+    break;
   default:
     sendBadCommand();
   }
