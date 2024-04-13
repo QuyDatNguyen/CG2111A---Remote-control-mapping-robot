@@ -57,12 +57,12 @@ volatile float alexCirc = 0.0;
  */
 
 // Colour sensor
-// using Port L
-#define S0 (1 << 6)  // PL6
-#define S1 (1 << 7)  // PL7
-#define S2 (1 << 1)  // PL1
-#define S3 (1 << 0)  // PL0
-#define sensorOut 37 // PL2
+// using Port C
+#define COLOR_SENSOR_S0 (1 << 3) // PC3
+#define COLOR_SENSOR_S1 (1 << 4) // PC4
+#define COLOR_SENSOR_S2 (1 << 1) // PC1
+#define COLOR_SENSOR_S3 (1 << 2) // PC2
+#define COLOR_SENSOR_OUTPUT 37   // (PC0)
 // pins must be changed according to the arduino pins we use
 
 // ultrasonic sensor
@@ -489,27 +489,27 @@ void sendDistance()
 // Intialize Alex's internal states
 void setupcolour()
 {
-
-  DDRL |= (((S0) | (S1)) | ((S2) | (S3)));
   // setting S0, S1, S2 and S3 pins as input/output
+  DDRC |= (((COLOR_SENSOR_S0) | (COLOR_SENSOR_S1)) | ((COLOR_SENSOR_S2) | (COLOR_SENSOR_S3)));
 
-  // setting freq scaling to 20%
-  PORTL = ((S0) & ~(S1));
-  // setting S0 as HIGH and S1 as LOW
+  // setting freq scaling to 20%: S0 as HIGH and S1 as LOW
+  PORTC |= COLOR_SENSOR_S0;
+  PORTC &= ~COLOR_SENSOR_S1;
 }
 
 int getAvgReading(int times)
 {
   // props for when we do mapping:
-  // , int low_map, int high_map
   int reading = 0;
   int total = 0;
   for (int i = 0; i < times; i++)
   {
+    // wait until sensorout is high
+    pulseIn(sensorOut, HIGH);
     reading = pulseIn(sensorOut, LOW);
     // reading = map(reading, high_map, low_map, 255, 0);
     total += reading;
-    delay(50);
+    delay(20);
   }
   return total / times;
 }
@@ -524,20 +524,22 @@ void sendColor()
 
   // setting RED filtered photodiodes to be read
   // setting S2 and S3 to LOW
-  PORTL &= (~(S2) & (~S3));
+  PORTC &= ~COLOR_SENSOR_S2;
+  PORTC &= ~COLOR_SENSOR_S3;
   delay(RGBWait);
   colorR = getAvgReading(5);
 
   // setting GREEN filtered photodiodes to be read
   // setting S2 and S3 to HIGH
-  PORTL |= ((S2) | (S3));
+  PORTC |= (COLOR_SENSOR_S2);
+  PORTC |= (COLOR_SENSOR_S3);
   delay(RGBWait);
   colorG = getAvgReading(5);
 
   // setting BLUE filtered photodiodes to be read
   // setting S2 to LOW and S3 to HIGH
-  PORTL &= (~(S2));
-  PORTL |= (S3);
+  PORTC &= ~COLOR_SENSOR_S2;
+  PORTC |= COLOR_SENSOR_S3;
   delay(RGBWait);
   colorB = getAvgReading(5);
 
