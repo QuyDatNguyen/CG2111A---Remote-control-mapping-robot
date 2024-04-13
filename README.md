@@ -47,20 +47,24 @@ https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
 2. Activate ROS and LiDAR Node on Raspberry Pi and 3. Activate ROS on PC
    - I will assume you have installed Ubuntu on your device/VM. Can actually see how to install them on Internet.
    - REMEMBER: You need to set up your Ubuntu to be in same network as you.
-     Eg: RPi IP is 172.20.10.5. If the IP of your Ubuntu is not 172.20.10.x (x is some number) then you are connected to same network yet.
+     Eg: RPi IP is 172.20.10.5. If the IP of your Ubuntu is not 172.20.10.x (x is some number) then you are not connected to same network yet.
+     '''
    You may proceed to find the way yourself. For UTM user, to save time can just change to Bridged Networking (search on Internet for better instruction, or can ask me)
    - Regardless of what may come next, ensure you at least have installed workspace and Hector_slam on your PC first. Follow "3.1 Creating a New Workspace and Building". Only do step 2.Activate ROS and LiDAR Node on Raspberry Pi if you choose to set RPi as master (Jayden and I cannot use that on Mac though)
    - This one serves for setting RPi as master. However, by some reasons cannot then there maybe some problems:
+     '''
      a. Forget to setup
      ```sh
      source ~/cg2111a/devel/setup.bash
      ```
      at new terminal. Remember this is the code to set the source for ros, not source /opt/ros/noetic/setup.bash (this only serves to build rplidar.ros on your PC)
+     '''
      b. Try to run
      ```sh
      rostopic list
      ```
      If you cannot see the /scan then probably you did not launch from RPi
+     '''
      c. If you see the /scan node, then run
      ```sh
      rostopic echo /scan
@@ -75,5 +79,6 @@ https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
        sudo apt-get install ros-noetic-hector-slam
 Additionally, when running rViz, having the pointing arrow will help a lot in detecting direction. Can see how to add this feature in Tutorial 3.
 If there are any problems, may consider to ask me or Prof.
+'''
 #Additional Notes on ROS Networking.
 Make sure to ony have 1 terminal only on 1 of 2 devices (RPi or PC) running roscore. If you want restart roscore on another terminal or on another device (RPi to PC or vice versa), remember to kill it on old terminal first (control C)
