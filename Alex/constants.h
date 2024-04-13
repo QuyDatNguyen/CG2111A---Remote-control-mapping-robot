@@ -26,7 +26,8 @@ typedef enum
   RESP_BAD_CHECKSUM = 3,
   RESP_BAD_COMMAND = 4,
   RESP_BAD_RESPONSE = 5,
-  RESP_COLOR = 6
+  RESP_COLOR = 6,
+  RESP_TOO_CLOSE = 7,
 } TResponseType;
 
 // Commands
