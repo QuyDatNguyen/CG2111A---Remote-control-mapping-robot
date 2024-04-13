@@ -289,18 +289,20 @@ void sendCommand(char command)
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    char portNumber;
-    printf("4. Enter the port number of the Arduino (from step 1): /dev/ttyACM");
-    scanf("%c", &portNumber);
-    flushInput();
+    if (argc != 2)
+    {
+        printf("[!] No port provided! Run the command as following, or modify the C code to remove this part\n\t./alex-pi <port number>\n\teg.\n\t./alex-pi 1", argv[0]);
+        return 1;
+    }
 
-    // Construct the port name
+    char *port = argv[1];
+    // char *port = "0"; // For testing
     char PORT_NAME[20];
-    sprintf(PORT_NAME, "%s%c", PORT_NAME_WITHOUT_NUM, portNumber);
+    sprintf(PORT_NAME, "%s%s", PORT_NAME_WITHOUT_NUM, port);
 
-    printf("PORT_NAME: %s\nConnecting...", PORT_NAME);
+    printf("Connecting to %s...", PORT_NAME);
 
     // Connect to the Arduino
     startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 5);
