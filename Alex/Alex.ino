@@ -710,18 +710,17 @@ void loop()
   // to track movement
   if (deltaDist > 0)
   {
-    if get
-      too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks float dist = readUltrasonic();
-    if (dist > 0 && dist < 5)
-    {
-      deltaDist = 0;
-      newDist = 0;
-      deltaTicks = 0;
-      targetTicks = 0;
-      sendTooClose();
-      stop();
-    }
-    // Serial.println(newDist);
+    // // if get
+    // //   too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks float dist = readUltrasonic();
+    // if (dist > 0 && dist < 5)
+    // {
+    //   deltaDist = 0;
+    //   newDist = 0;
+    //   deltaTicks = 0;
+    //   targetTicks = 0;
+    //   sendTooClose();
+    //   stop();
+    // }
     if (dir == FORWARD)
     {
       if (forwardDist > newDist)
