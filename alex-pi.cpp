@@ -58,7 +58,7 @@ void handleColor(TPacket *packet)
     printf("Green:\t%d\n", packet->params[1]);
     printf("Blue:\t%d\n", packet->params[2]);
 
-    printf("\033 [48;2;%d;%d;%d        \n", 23, 198, 220);
+    printf("\033 [48;2;%d;%d;%dm        \033[m\n", 23, 198, 220);
 }
 
 void handleResponse(TPacket *packet)
@@ -75,6 +75,9 @@ void handleResponse(TPacket *packet)
         break;
     case RESP_COLOR:
         handleColor(packet);
+        break;
+    case RESP_TOO_CLOSE:
+        printf("Stopped because too close!\n");
         break;
 
     default:
