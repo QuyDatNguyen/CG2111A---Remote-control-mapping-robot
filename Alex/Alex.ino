@@ -598,6 +598,9 @@ void handleCommand(TPacket *command)
     sendOK();
     sendColor();
     break;
+  case COMMAND_GET_IR:
+    sendOK();
+    sendDistance();
   default:
     sendBadCommand();
   }
