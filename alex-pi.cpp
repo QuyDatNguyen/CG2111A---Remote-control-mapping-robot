@@ -279,6 +279,7 @@ void sendCommand(char command)
         sendPacket(&commandPacket);
         break;
     case 'u':
+    case 'U':
         commandPacket.command = COMMAND_GET_IR;
         sendPacket(&commandPacket);
         break;
