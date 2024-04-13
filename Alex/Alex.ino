@@ -503,7 +503,7 @@ void setupcolour()
 
   // turn on ADCSRA
   // set prescaler to 32
-  ADCSRA = 0b10000101;
+  ADCSRA = 0b10000100;
 
   // set reference voltages to be AREF
   ADMUX = 0b01000000;
@@ -513,7 +513,7 @@ void setupcolour()
 int getAvgReading(int times)
 {
   // props for when we do mapping:
-  // int reading = 0;
+  int reading = 0;
   // int total = 0;
   // for (int i = 0; i < times; i++)
   // {
@@ -532,7 +532,7 @@ int getAvgReading(int times)
   //   delay(20);
   // }
   // return total / times;
-  return total;
+  return reading;
 }
 
 void sendColor()
