@@ -495,8 +495,8 @@ void setupcolour()
   DDRC |= (((COLOR_SENSOR_S0) | (COLOR_SENSOR_S1)) | ((COLOR_SENSOR_S2) | (COLOR_SENSOR_S3)));
 
   // setting freq scaling to 20%: S0 as HIGH and S1 as LOW
-  PORTC |= COLOR_SENSOR_S0;
-  PORTC &= ~COLOR_SENSOR_S1;
+  PORTC &= ~COLOR_SENSOR_S0;
+  PORTC |= COLOR_SENSOR_S1;
 }
 
 int getAvgReading(int times)
