@@ -291,7 +291,7 @@ void sendCommand(char command)
 int main()
 {
     char portNumber;
-    printf("Enter the port number of the Arduino (e.g. 0 for /dev/ttyACM0)\n");
+    printf("3.Go compile and run the code on the Arduino. The file is linked on the desktop.\n4. Enter the port number of the Arduino (from step 1): /dev/ttyACM");
     scanf("%c", &portNumber);
     flushInput();
 

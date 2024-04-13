@@ -33,7 +33,7 @@ gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
 Extra: Steps 2 to 4 in one command:
 
 ```sh
-git stash --all && gh repo sync && git log -1 && gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
+echo -e "\n\n  ^~^  ,\n ('Y') )\n /   \/ \n(\|||/) Let's go, Alex! [hjw & kgur]\n\n\033[1m\033[1;35mStartup steps...\033[0m\033[0m\n1. Connected port(s) is: \033[1;33m$(ls /dev/ttyACM*)\033[0m" && git stash --all -q && gh repo sync > ~/nul && git log -1 --pretty=format:"2. Code updated to most recent commit %C(Cyan bold)\"%s\"%Creset" && gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
 ```
 
 # Troubleshooting

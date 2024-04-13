@@ -465,7 +465,7 @@ int readUltrasonic()
   delay(10);
   PORTL &= ~TRIG; // set LOW
   delay(10);
-  int duration = pulseIn(47, HIGH);
+  int duration = pulseIn(47, HIGH, TIMEOUT);
   float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
   // return dist;
   return duration;
@@ -706,16 +706,16 @@ void loop()
     sendBadChecksum();
   }
   // if get too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks
-  float dist = readUltrasonic();
-  if (dist > 0 && dist < 5)
-  {
-    deltaDist = 0;
-    newDist = 0;
-    deltaTicks = 0;
-    targetTicks = 0;
-    sendTooClose();
-    stop();
-  }
+  // float dist = readUltrasonic();
+  // if (dist > 0 && dist < 5)
+  // {
+  //   deltaDist = 0;
+  //   newDist = 0;
+  //   deltaTicks = 0;
+  //   targetTicks = 0;
+  //   sendTooClose();
+  //   stop();
+  // }
   // to track movement
   if (deltaDist > 0)
   {
