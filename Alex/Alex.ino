@@ -466,7 +466,7 @@ float readUltrasonic()
   PORTD &= ~TRIG; // set LOW
   delay(10);
   long duration = pulseIn(ECHO, HIGH, TIMEOUT);
-  float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get cm value
+  float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
   return dist;
 }
 
@@ -476,9 +476,9 @@ void sendDistance()
   messagePacket.packetType = PACKET_TYPE_RESPONSE;
   messagePacket.command = RESP_IR_DISTANCE;
 
-  int distance = readUltrasonic();
+  int distance = readUltrasonic() * 10; // convert to mm
 
-  messagePacket.params[0] = distance;
+  messagePacket.params[0] = distance; // printing value will be in mm
 
   sendResponse(&messagePacket);
 }

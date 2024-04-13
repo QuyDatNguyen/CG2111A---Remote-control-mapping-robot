@@ -77,7 +77,7 @@ void handleColor(TPacket *packet)
 
 void handleDistance(TPacket *packet)
 {
-    printf("Detected distance: %d cm\n", packet->params[0]);
+    printf("Detected distance: %d mm\n", packet->params[0]);
 }
 
 void handleResponse(TPacket *packet)
