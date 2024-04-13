@@ -63,9 +63,9 @@ void handleColor(TPacket *packet)
 {
     // printf("\n ------- COLOR REPORT ------- \n\n");
     int rgb[3];
-    rgb[0] = map(packet->params[0], 8, 132, 255, 0);
-    rgb[1] = map(packet->params[1], 8, 132, 255, 0);
-    rgb[2] = map(packet->params[2], 8, 132, 255, 0);
+    rgb[0] = map(packet->params[0], 8, 80, 255, 0);
+    rgb[1] = map(packet->params[1], 8, 80, 255, 0);
+    rgb[2] = map(packet->params[2], 8, 80, 255, 0);
     // printf("Red:\t%d\n", packet->params[0]);
     // printf("Green:\t%d\n", packet->params[1]);
     // printf("Blue:\t%d\n", packet->params[2]);
