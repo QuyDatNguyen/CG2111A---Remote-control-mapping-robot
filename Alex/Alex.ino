@@ -67,7 +67,7 @@ volatile float alexCirc = 0.0;
 
 // ultrasonic sensor
 #define TRIG (1 << 3)      // PD3, PIN 46
-#define ECHO (1 << 4)      // PB6, PIN 47
+#define ECHO (1 << 4)      // PD4, PIN 47
 #define SPEED_OF_SOUND 340 // (m/s)
 #define TIMEOUT 1500       // Max microseconds to wait; choose according to max distance of wall
 
@@ -465,10 +465,10 @@ int readUltrasonic()
   delay(10);
   PORTD &= ~TRIG; // set LOW
   delay(10);
-  int duration = pulseIn(ECHO, HIGH, TIMEOUT);
+  int duration = pulseIn(ECHO, HIGH, 10000);
   float dist = ((float)duration) / 2.0 / 1000000 * SPEED_OF_SOUND * 100; // divide 1000000 to convert to us, *100 to get mm value
   // return dist;
-  return duration
+  return duration;
 }
 
 void sendDistance()
