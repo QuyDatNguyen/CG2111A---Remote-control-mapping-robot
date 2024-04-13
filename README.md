@@ -23,7 +23,7 @@ git stash --all && gh repo sync && git log -1
 3. Use VNC to compile & upload code to the Arduino. The folder with the .ino file is pinned in the sidebar, so you can just open it directly.
 <!--  (Sorry I tried to figure out a way to do it with ssh but I cannot figure it out ffs). -->
 
-1. Run code for RPi side (and pray it works).
+4. Run code for RPi side (and pray it works).
 
 ```sh
 gcc alex-pi.cpp serial.cpp serialize.cpp -pthread -o alex-pi && ./alex-pi
