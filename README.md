@@ -74,4 +74,6 @@ https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
   5. Visualize Mapping Data Using RViz on PC. Follow this if you want to set your PC as the master. Just follow it. You may want to install ros-noectis-hector-slam on your PC as well (just check if you have not installed yet. Below is the code for installation)
        sudo apt-get install ros-noetic-hector-slam
 Additionally, when running rViz, having the pointing arrow will help a lot in detecting direction. Can see how to add this feature in Tutorial 3.
-If there are any problems, may consider to ask me or Prof. 
+If there are any problems, may consider to ask me or Prof.
+#Additional Notes on ROS Networking.
+Make sure to ony have 1 terminal only on 1 of 2 devices (RPi or PC) running roscore. If you want restart roscore on another terminal or on another device (RPi to PC or vice versa), remember to kill it on old terminal first (control C)
