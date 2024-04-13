@@ -77,8 +77,33 @@ void handleColor(TPacket *packet)
 
 void handleDistance(TPacket *packet)
 {
-    printf("Detected distance: %d mm\n", packet->params[0]);
-    printf("Magic number: %d\n", packet->params[1]);
+    // draw a little diagram with box characters to show the distance, min being 0 cm and max being 20 cm
+    // the diagram can be 20 characters long
+
+    int distance = packet->params[0];
+    int distanceInCm = distance / 10;
+
+    printf("\n      \\    /\\n       )  ( ')\n      (  /  )\njgs    \\(__)|");
+    for (int i = 0; i < 20; i++)
+    {
+        if (i < distanceInCm)
+        {
+            printf("─");
+        }
+        else if (i == distanceInCm)
+        {
+            printf("┤");
+        }
+        else
+        {
+            printf(" ");
+        }
+    }
+    if (distanceInCm >= 20)
+    {
+        printf("⋯");
+    }
+    printf("\n            0    5   10   15   20 cms\nDetected distance: %d mm\n", packet->params[0]);
 }
 
 void handleResponse(TPacket *packet)

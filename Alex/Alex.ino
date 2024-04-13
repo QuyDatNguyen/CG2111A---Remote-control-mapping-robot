@@ -480,7 +480,6 @@ void sendDistance()
   int distance = readUltrasonic(); // convert to mm
 
   messagePacket.params[0] = distance; // printing value will be in mm
-  messagePacket.params[1] = 1225;     // printing value will be in mm
 
   sendResponse(&messagePacket);
 }
@@ -706,20 +705,20 @@ void loop()
   {
     sendBadChecksum();
   }
-  // if get too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks
-  // float dist = readUltrasonic();
-  // if (dist > 0 && dist < 5)
-  // {
-  //   deltaDist = 0;
-  //   newDist = 0;
-  //   deltaTicks = 0;
-  //   targetTicks = 0;
-  //   sendTooClose();
-  //   stop();
-  // }
   // to track movement
   if (deltaDist > 0)
   {
+    if get
+      too close to the object, the robot will stop and clear all deltaDist, newDist, deltaTicks, newTicks float dist = readUltrasonic();
+    if (dist > 0 && dist < 5)
+    {
+      deltaDist = 0;
+      newDist = 0;
+      deltaTicks = 0;
+      targetTicks = 0;
+      sendTooClose();
+      stop();
+    }
     // Serial.println(newDist);
     if (dir == FORWARD)
     {
