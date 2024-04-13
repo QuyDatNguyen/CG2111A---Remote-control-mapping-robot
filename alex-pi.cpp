@@ -45,9 +45,9 @@ void handleStatus(TPacket *packet)
     printf("Right Reverse Ticks Turns:\t%d\n", packet->params[7]);
     printf("Forward Distance:\t\t%d\n", packet->params[8]);
     printf("Reverse Distance:\t\t%d\n", packet->params[9]);
-    printf("Target Ticks:\t\t%d\n", packet->params[10]);
-    printf("Delta Ticks:\t\t%d\n", packet->params[11]);
-    printf("Delta Dist:\t\t%d\n", packet->params[12]);
+    printf("Target Ticks:\t\t\t%d\n", packet->params[10]);
+    printf("Delta Ticks:\t\t\t%d\n", packet->params[11]);
+    printf("Delta Dist:\t\t\t%d\n", packet->params[12]);
     printf("\n---------------------------------------\n\n");
 }
 
