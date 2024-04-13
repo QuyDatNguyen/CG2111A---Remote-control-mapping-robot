@@ -20,11 +20,17 @@
 #include "Arduino.h"
 
 // using Port L
-#define S0 (1 << 6)  // PL6
-#define S1 (1 << 7)  // PL7
-#define S2 (1 << 1)  // PL1
-#define S3 (1 << 0)  // PL0
-#define sensorOut 37 // PL2
+// #define S0 (1 << 6)  // PL6
+// #define S1 (1 << 7)  // PL7
+// #define S2 (1 << 1)  // PL1
+// #define S3 (1 << 0)  // PL0
+// #define sensorOut 37 // PL2
+
+#define COLOR_SENSOR_S0 (1 << 3) // PC3
+#define COLOR_SENSOR_S1 (1 << 4) // PC4
+#define COLOR_SENSOR_S2 (1 << 1) // PC1
+#define COLOR_SENSOR_S3 (1 << 2) // PC2
+#define COLOR_SENSOR_OUTPUT 37   // (PC0)
 
 void setup()
 {

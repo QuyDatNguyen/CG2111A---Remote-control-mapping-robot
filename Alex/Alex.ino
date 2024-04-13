@@ -504,9 +504,9 @@ int getAvgReading(int times)
   int total = 0;
   for (int i = 0; i < times; i++)
   {
-    // wait until sensorout is high
-    pulseIn(sensorOut, HIGH);
-    reading = pulseIn(sensorOut, LOW);
+    // wait until COLOR_SENSOR_OUTPUT is high
+    pulseIn(COLOR_SENSOR_OUTPUT, HIGH);
+    reading = pulseIn(COLOR_SENSOR_OUTPUT, LOW);
     // reading = map(reading, high_map, low_map, 255, 0);
     total += reading;
     delay(20);
