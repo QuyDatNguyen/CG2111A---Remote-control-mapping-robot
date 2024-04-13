@@ -494,6 +494,8 @@ void setupcolour()
 {
   // setting S0, S1, S2 and S3 pins as output
   DDRC |= (((COLOR_SENSOR_S0) | (COLOR_SENSOR_S1)) | ((COLOR_SENSOR_S2) | (COLOR_SENSOR_S3)));
+  // setting output pin as input
+  DDRC &= ~(1 << 0);
 
   // setting freq scaling to 2%: S0 as LOw and S1 as HIGH
   PORTC &= ~COLOR_SENSOR_S0;
@@ -520,14 +522,15 @@ int getAvgReading(int times)
   // {
   // wait until COLOR_SENSOR_OUTPUT is high
   // pulseIn(COLOR_SENSOR_OUTPUT, HIGH);
-  // reading = pulseIn(COLOR_SENSOR_OUTPUT, LOW);
+  reading = pulseIn(COLOR_SENSOR_OUTPUT, LOW);
 
-  ADCSRA |= 0b01000000;
-  while (ADCSRA & 0b01000000)
-    ;
-  int low = ADCL;
-  int high = ADCH;
-  reading = (high << 8) + low;
+  // ADCSRA |= 0b01000000;
+  // while (ADCSRA & 0b01000000)
+  //   ;
+  // int low = ADCL;
+  // int high = ADCH;
+  // reading = (high << 8) + low;
+
   // reading = map(reading, high_map, low_map, 255, 0);
   //   total += reading;
   //   delay(20);
