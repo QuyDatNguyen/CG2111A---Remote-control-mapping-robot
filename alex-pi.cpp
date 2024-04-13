@@ -278,6 +278,10 @@ void sendCommand(char command)
         commandPacket.command = COMMAND_GET_COLOUR;
         sendPacket(&commandPacket);
         break;
+    case 'u':
+        commandPacket.command = COMMAND_GET_IR;
+        sendPacket(&commandPacket);
+        break;
     default:
         printf("Bad command\n");
     }

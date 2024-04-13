@@ -454,8 +454,8 @@ void clearOneCounter(int which)
 // ultrasonic sensor setup
 void setupUltrasonic()
 {
-  DDRD |= TRIG; // set PB5 as trigger pin (output)
-  DDRD &= ~ECHO // set PB6 as echo pin (input)
+  DDRD |= TRIG;  // set PB5 as trigger pin (output)
+  DDRD &= ~ECHO; // set PB6 as echo pin (input)
 }
 float readUltrasonic()
 {
@@ -515,7 +515,7 @@ int getAvgReading(int times)
 
 void sendColor()
 {
-  int colorR, colorB, colorB;
+  int colorR, colorG, colorB;
 
   TPacket messagePacket;
   messagePacket.packetType = PACKET_TYPE_RESPONSE;
