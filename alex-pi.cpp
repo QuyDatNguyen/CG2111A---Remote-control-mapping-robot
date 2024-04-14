@@ -314,6 +314,15 @@ void sendCommand(char command)
     }
 }
 
+void showControls()
+{
+    printf("\n");
+    printf("   F      🛑 S   🎨 D \n");
+    printf(" L   R    📊 G   📏 U \n");
+    printf("   B      🗑️ C   🟥 Q \n");
+    printf("\n");
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 2)
@@ -336,7 +345,7 @@ int main(int argc, char *argv[])
     printf("   Connected! (hopefully)\n");
     printf("5. Waiting 2 seconds for Arduino to reboot... ");
     sleep(2);
-    printf("   Done! 😸\n");
+    printf("aaaand done!\n");
 
     // Spawn receiver thread
     pthread_t recv;
@@ -352,8 +361,11 @@ int main(int argc, char *argv[])
     while (!exitFlag)
     {
         char ch;
-        printf("Command (f=forward, b=reverse, l=turn left, r=turn right, s=stop, c=clear stats, g=get stats q=exit, d=color, u=distance (ultrasonic))\n");
-        scanf("%c", &ch);
+        showControls();
+        // scanf("%c", &ch);
+        // above but without requiring an enter
+        // something like getch() but cross platform
+        ch = getchar();
 
         // Purge extraneous characters from input stream
         flushInput();
