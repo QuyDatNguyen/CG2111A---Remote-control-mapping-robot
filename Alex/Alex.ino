@@ -1,119 +1,80 @@
-
+#ifndef __INTELLISENSE__
 #include <serialize.h>
+#endif
+
 #include <math.h>
 #include "packet.h"
 #include "constants.h"
 #include <stdarg.h>
-// the code is modified for W9S1
-volatile TDirection dir;
 
-// Store the ticks from Alex's left and
-// right encoders.
-volatile unsigned long leftForwardTicks;
-volatile unsigned long rightForwardTicks;
+// ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀█░█▀█░▀█▀░█▀▀
+// ░█░░░█░█░█░█░▀▀█░░█░░█▀█░█░█░░█░░▀▀█
+// ░▀▀▀░▀▀▀░▀░▀░▀▀▀░░▀░░▀░▀░▀░▀░░▀░░▀▀▀
 
-// Store the revolutions on Alex's left
-// and right wheels
-volatile unsigned long leftReverseTicks;
-volatile unsigned long rightReverseTicks;
-
-// Forward and backward distance traveled
-volatile unsigned long forwardDist;
-volatile unsigned long reverseDist;
-// variables to keep track whether we have moved
-// a command distance
-// ref: w9s1 activity 4
-volatile unsigned long deltaDist;
-volatile unsigned long newDist;
-volatile unsigned long deltaTicks;
-volatile unsigned long targetTicks;
-// Left and right encoder ticks for turning
-volatile unsigned long leftForwardTicksTurns;
-volatile unsigned long rightForwardTicksTurns;
-volatile unsigned long leftReverseTicksTurns;
-volatile unsigned long rightReverseTicksTurns;
-
-// Number of ticks per revolution from the
-// wheel encoder.
-
-#define COUNTS_PER_REV 4
-
-// Wheel circumference in cm.
-// We will use this to calculate forward/backward distance traveled
-// by taking revs * WHEEL_CIRC
-#define RGBWait 1000 // in milisecs
-/*
- * Alex's configuration constants
+/**
+ * Movements and Dimensions
  */
 
+// Number of ticks per 1 revolution from the wheel encoder.
+#define COUNTS_PER_REV 4
+// Wheel circumference in cm.
 #define WHEEL_CIRC 20
 #define ALEX_LENGTH 13
 #define ALEX_BREADTH 13
 #define CIRC_PI 3.141592654
-volatile float alexDiagonal = 0.0;
-volatile float alexCirc = 0.0;
-/*
- *    Alex's State Variables
- */
+volatile double ALEX_DIAGONAL = 0.0;
+volatile double ALEX_CIRC = 0.0;
 
-// Colour sensor
-// using Port C
+/**
+ * Color Sensing [Port C]
+ */
 #define COLOR_SENSOR_S0 (1 << 3) // PC3, Pin 34
 #define COLOR_SENSOR_S1 (1 << 4) // PC4, Pin 33
 #define COLOR_SENSOR_S2 (1 << 2) // PC2, Pin 35
 #define COLOR_SENSOR_S3 (1 << 1) // PC1, Pin 36
 #define COLOR_SENSOR_OUTPUT 37   // (PC0, Pin 37)
-// pins must be changed according to the arduino pins we use
+#define COLOR_SENSOR_WAIT 1000   // in millisecs
 
-// ultrasonic sensor
+/**
+ * Ultrasound Sensor [Port L]
+ */
 #define TRIG (1 << 3)        // PL3, PIN 46
 #define ECHO (1 << 2)        // PL2, PIN 47
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
 #define GAP_FROM_FRONT 35    // gap between sensor and front of the robot, in mm
 
-// int frequency = 0;
-// #define RED_ARR = {255, 0, 0};
-// #define GRE_ARR = {0, 255, 0};
-// #define WHITE_ARR = {255, 255, 255};
-// #define NUMBCOL = 3 // number of colour to detect
-// static int allColourArray[NUMCOL][3] = {WHI_ARR, RED_ARR, GRE_ARR};
-// //  0-White; 1-RED; 2-GREEN
-// // change all these values after calibration
-// int low_map[3] = {0, 0, 0);
-// int high_map[3] = {0, 0, 0};
-// // used for mapping [0]-red, [1]-green, [2]-blue
+// ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
+// ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
+// ░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
 
-unsigned long computeDeltaTicks(float ang)
-{
-  unsigned long ticks = (unsigned long)((ang * alexCirc * COUNTS_PER_REV) / (360.0 * WHEEL_CIRC));
-  return ticks;
-}
-void left(float ang, float speed)
-{
-  if (ang == 0)
-    deltaTicks = 99999999;
-  else
-    deltaTicks = computeDeltaTicks(ang);
+volatile TDirection dir;
 
-  targetTicks = leftReverseTicksTurns + deltaTicks;
-  ccw(ang, speed);
-}
-void right(float ang, float speed)
-{
-  if (ang == 0)
-    deltaTicks = 99999999;
-  else
-    deltaTicks = computeDeltaTicks(ang);
+// Store the ticks from Alex's left and right encoders.
+volatile unsigned long leftForwardTicks;
+volatile unsigned long rightForwardTicks;
+volatile unsigned long leftReverseTicks;
+volatile unsigned long rightReverseTicks;
 
-  targetTicks = rightReverseTicksTurns + deltaTicks;
-  cw(ang, speed);
-}
-/*
- *
- * Alex Communication Routines.
- *
- */
+// Forward and backward distance traveled
+volatile unsigned long forwardDist;
+volatile unsigned long reverseDist;
+
+// Left and right encoder ticks for turning
+volatile unsigned long leftForwardTicksTurns;
+volatile unsigned long rightForwardTicksTurns;
+volatile unsigned long leftReverseTicksTurns;
+volatile unsigned long rightReverseTicksTurns;
+
+// variables to keep track whether we have moved the commanded distance
+volatile unsigned long deltaDist;
+volatile unsigned long newDist;
+volatile unsigned long deltaTicks;
+volatile unsigned long targetTicks;
+
+// ░█▀▀░█▀█░█▄█░█▄█░█░█░█▀█░▀█▀░█▀▀░█▀█░▀█▀░▀█▀░█▀█░█▀█
+// ░█░░░█░█░█░█░█░█░█░█░█░█░░█░░█░░░█▀█░░█░░░█░░█░█░█░█
+// ░▀▀▀░▀▀▀░▀░▀░▀░▀░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
 
 TResult readPacket(TPacket *packet)
 {
@@ -137,26 +98,10 @@ void sendStatus()
   // Implement code to send back a packet containing key
   // information like leftTicks, rightTicks, leftRevs, rightRevs
   // forwardDist and reverseDist
-  // Use the params array to store this information, and set the
-  // packetType and command files accordingly, then use sendResponse
-  // to send out the packet. See sendMessage on how to use sendResponse.
-  //
 
   TPacket messagePacket;
   messagePacket.packetType = PACKET_TYPE_RESPONSE;
   messagePacket.command = RESP_STATUS;
-  // messagePacket.params = [
-  //   leftForwardTicks,
-  //   rightForwardTicks,
-  //   leftReverseTicks,
-  //   rightReverseTicks,
-  //   leftForwardTicksTurns,
-  //   rightForwardTicksTurns,
-  //   leftReverseTicksTurns,
-  //   rightReverseTicksTurns,
-  //   forwardDist,
-  //   reverseDist
-  // ];
   messagePacket.params[0] = leftForwardTicks;
   messagePacket.params[1] = rightForwardTicks;
   messagePacket.params[2] = leftReverseTicks;
@@ -256,11 +201,71 @@ void sendResponse(TPacket *packet)
   writeSerial(buffer, len);
 }
 
-/*
- * Setup and start codes for external interrupts and
- * pullup resistors.
- *
- */
+// Set up the serial connection.
+void setupSerial()
+{
+  // To replace later with bare-metal.
+  Serial.begin(9600);
+}
+
+// Start the serial connection.
+void startSerial()
+{
+  // To replace later with bare-metal.
+}
+
+// Read the serial port. Returns the read character in
+// ch if available. Also returns TRUE if ch is valid.
+int readSerial(char *buffer)
+{
+  // To replace later with bare-metal.
+  int count = 0;
+
+  while (Serial.available())
+    buffer[count++] = Serial.read();
+
+  return count;
+}
+
+// Write to the serial port.
+void writeSerial(const char *buffer, int len)
+{
+  // To replace later with bare-metal.
+  Serial.write(buffer, len);
+}
+
+// ░█▄█░█▀█░█░█░█▀▀░█▄█░█▀▀░█▀█░▀█▀
+// ░█░█░█░█░▀▄▀░█▀▀░█░█░█▀▀░█░█░░█░
+// ░▀░▀░▀▀▀░░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░
+
+unsigned long computeDeltaTicks(float ang)
+{
+  unsigned long ticks = (unsigned long)((ang * ALEX_CIRC * COUNTS_PER_REV) / (360.0 * WHEEL_CIRC));
+  return ticks;
+}
+
+void left(float ang, float speed)
+{
+  if (ang == 0)
+    deltaTicks = 99999999;
+  else
+    deltaTicks = computeDeltaTicks(ang);
+
+  targetTicks = leftReverseTicksTurns + deltaTicks;
+  ccw(ang, speed);
+}
+
+void right(float ang, float speed)
+{
+  if (ang == 0)
+    deltaTicks = 99999999;
+  else
+    deltaTicks = computeDeltaTicks(ang);
+
+  targetTicks = rightReverseTicksTurns + deltaTicks;
+  cw(ang, speed);
+}
+
 // Enable pull up resistors on pins 18 and 19
 void enablePullups()
 {
@@ -274,8 +279,6 @@ void enablePullups()
 // Functions to be called by INT2 and INT3 ISRs.
 void leftISR()
 {
-
-  // dbprintf("L ");
   if (dir == FORWARD)
   {
     leftForwardTicks++;
@@ -288,7 +291,6 @@ void leftISR()
   }
   else if (dir == LEFT)
   {
-
     leftReverseTicksTurns++;
   }
   else if (dir == RIGHT)
@@ -322,17 +324,9 @@ void rightISR()
 // for falling edge triggered. Use bare-metal.
 void setupEINT()
 {
-  // Use bare-metal to configure pins 18 and 19 to be
-  // falling edge triggered. Remember to enable
-  // the INT2 and INT3 interrupts.
-  // Hint: Check pages 110 and 111 in the ATmega2560 Datasheet.
   EICRA |= 0b10100000;
   EIMSK |= 0b00001100;
 }
-
-// Implement the external interrupt ISRs below.
-// INT3 ISR should call leftISR while INT2 ISR
-// should call rightISR.
 
 // Implement INT2 and INT3 ISRs above.
 ISR(INT3_vect)
@@ -345,113 +339,10 @@ ISR(INT2_vect) // NOT WORKING (PROPERLY)
   // right is moved up to the left side for now LMAO
 }
 
-/*
- * Setup and start codes for serial communications
- *
- */
-// Set up the serial connection. For now we are using
-// Arduino Wiring, you will replace this later
-// with bare-metal code.
-void setupSerial()
-{
-  // To replace later with bare-metal.
-  Serial.begin(9600);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using the other UARTs
-}
+// ░█▀▀░█▀▀░█▀█░█▀▀░█▀█░█▀▄░█▀▀
+// ░▀▀█░█▀▀░█░█░▀▀█░█░█░█▀▄░▀▀█
+// ░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀░▀░▀▀▀
 
-// Start the serial connection. For now we are using
-// Arduino wiring and this function is empty. We will
-// replace this later with bare-metal code.
-
-void startSerial()
-{
-  // Empty for now. To be replaced with bare-metal code
-  // later on.
-}
-
-// Read the serial port. Returns the read character in
-// ch if available. Also returns TRUE if ch is valid.
-// This will be replaced later with bare-metal code.
-
-int readSerial(char *buffer)
-{
-
-  int count = 0;
-
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
-
-  while (Serial.available())
-    buffer[count++] = Serial.read();
-
-  return count;
-}
-
-// Write to the serial port. Replaced later with
-// bare-metal code
-
-void writeSerial(const char *buffer, int len)
-{
-  Serial.write(buffer, len);
-  // Change Serial to Serial2/Serial3/Serial4 in later labs when using other UARTs
-}
-
-/*
- * Alex's setup and run codes
- *
- */
-
-// Clears all our counters
-void clearCounters()
-{
-  leftForwardTicks = 0;
-  rightForwardTicks = 0;
-  leftReverseTicks = 0;
-  rightReverseTicks = 0;
-  leftForwardTicksTurns = 0;
-  rightForwardTicksTurns = 0;
-  leftReverseTicksTurns = 0;
-  rightReverseTicksTurns = 0;
-  forwardDist = 0;
-  reverseDist = 0;
-}
-
-// Clears one particular counter
-void clearOneCounter(int which)
-{
-
-  switch (which)
-  {
-  case 0:
-    clearCounters();
-    break;
-
-  case 1:
-    leftForwardTicks = 0;
-    break;
-
-  case 2:
-    rightForwardTicks = 0;
-    break;
-
-  case 3:
-    leftReverseTicks = 0;
-    break;
-
-  case 4:
-    rightReverseTicks = 0;
-    break;
-
-  case 5:
-    forwardDist = 0;
-    break;
-
-  case 6:
-    reverseDist = 0;
-    break;
-  }
-
-  // clearCounters();
-}
 // ultrasonic sensor setup
 void setupUltrasonic()
 {
@@ -499,16 +390,17 @@ void setupcolour()
   PORTC &= ~COLOR_SENSOR_S0;
   PORTC |= COLOR_SENSOR_S1;
 
-  // turn off power reduction register for adc
-  PRR0 &= ~0b00000001;
+  // // ADC attempt:
+  // // turn off power reduction register for adc
+  // PRR0 &= ~0b00000001;
 
-  // turn on ADCSRA
-  // set prescaler to 32
-  ADCSRA = 0b10000100;
+  // // turn on ADCSRA
+  // // set prescaler to 32
+  // ADCSRA = 0b10000100;
 
-  // set reference voltages to be AREF
-  ADMUX = 0b01000000;
-  ADCSRB |= 0b00001000;
+  // // set reference voltages to be AREF
+  // ADMUX = 0b01000000;
+  // ADCSRB |= 0b00001000;
 }
 
 int getAvgReading(int times)
@@ -549,21 +441,21 @@ void sendColor()
   // setting S2 and S3 to LOW
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC &= ~COLOR_SENSOR_S3;
-  delay(RGBWait);
+  delay(COLOR_SENSOR_WAIT);
   colorR = getAvgReading(5);
 
   // setting GREEN filtered photodiodes to be read
   // setting S2 and S3 to HIGH
   PORTC |= (COLOR_SENSOR_S2);
   PORTC |= (COLOR_SENSOR_S3);
-  delay(RGBWait);
+  delay(COLOR_SENSOR_WAIT);
   colorG = getAvgReading(5);
 
   // setting BLUE filtered photodiodes to be read
   // setting S2 to LOW and S3 to HIGH
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC |= COLOR_SENSOR_S3;
-  delay(RGBWait);
+  delay(COLOR_SENSOR_WAIT);
   colorB = getAvgReading(5);
 
   messagePacket.params[0] = colorR;
@@ -580,6 +472,25 @@ void sendTooClose()
   messagePacket.command = RESP_TOO_CLOSE;
 
   sendResponse(&messagePacket);
+}
+
+// ░█▀▀░█▀▀░▀█▀░█░█░█▀█
+// ░▀▀█░█▀▀░░█░░█░█░█▀▀
+// ░▀▀▀░▀▀▀░░▀░░▀▀▀░▀░░
+
+// Clears all our counters
+void clearCounters()
+{
+  leftForwardTicks = 0;
+  rightForwardTicks = 0;
+  leftReverseTicks = 0;
+  rightReverseTicks = 0;
+  leftForwardTicksTurns = 0;
+  rightForwardTicksTurns = 0;
+  leftReverseTicksTurns = 0;
+  rightReverseTicksTurns = 0;
+  forwardDist = 0;
+  reverseDist = 0;
 }
 
 void initializeState()
@@ -618,7 +529,8 @@ void handleCommand(TPacket *command)
     break;
   case COMMAND_CLEAR_STATS:
     sendOK();
-    clearOneCounter((int)command->params[0]);
+    clearCounters();
+    // clearOneCounter((int)command->params[0]);
     break;
   case COMMAND_GET_COLOUR:
     sendOK();
@@ -670,17 +582,17 @@ void waitForHello()
 void setup()
 {
   // put your setup code here, to run once:
-  alexDiagonal = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
-  alexCirc = CIRC_PI * alexDiagonal;
+  ALEX_DIAGONAL = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
+  ALEX_CIRC = CIRC_PI * ALEX_DIAGONAL;
+
   cli();
   setupEINT();
   setupSerial();
-  // setupcolour();
+  setupcolour();
   startSerial();
   enablePullups();
   initializeState();
   sei();
-  // Serial.begin(9600);
 }
 
 void handlePacket(TPacket *packet)
@@ -705,15 +617,12 @@ void handlePacket(TPacket *packet)
   }
 }
 
+// ░█▄█░█▀█░▀█▀░█▀█
+// ░█░█░█▀█░░█░░█░█
+// ░▀░▀░▀░▀░▀▀▀░▀░▀
+
 void loop()
 {
-  // Uncomment the code below for Step 2 of Activity 3 in Week 8 Studio 2
-
-  // forward(0, 100);
-
-  // Uncomment the code below for Week 9 Studio 2
-
-  // put your main code here, to run repeatedly:
   TPacket recvPacket; // This holds commands from the Pi
 
   TResult result = readPacket(&recvPacket);
