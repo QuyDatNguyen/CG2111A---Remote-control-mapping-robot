@@ -462,14 +462,12 @@ void setupUltrasonic()
 // Reads the ultrasonic sensor and returns the distance in mms
 int readUltrasonic()
 {
-  delay(2);
   PORTL |= TRIG; // set HIGH
   delayMicroseconds(10);
   PORTL &= ~TRIG; // set LOW
-  delayMicroseconds(60);
 
-  unsigned long duration = pulseIn(47, HIGH, TIMEOUT);                      // read pulse length in us
-  double dist = (((double)duration) / 2 * SPEED_OF_SOUND) - GAP_FROM_FRONT; // convert to mms
+  unsigned long duration = pulseIn(47, HIGH);                   // read pulse length in us
+  double dist = duration / 2 * SPEED_OF_SOUND - GAP_FROM_FRONT; // convert to mms
   // return dist;
   return (int)dist;
 }
