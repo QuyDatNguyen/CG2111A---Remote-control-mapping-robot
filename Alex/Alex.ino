@@ -640,17 +640,6 @@ void loop()
   // to track movement
   if (deltaDist > 0)
   {
-    // if the bot gets too close to an object, stop everything and report to operator
-    int dist = readUltrasonic();
-    if (dist > 0 && dist < 50)
-    {
-      deltaDist = 0;
-      newDist = 0;
-      deltaTicks = 0;
-      targetTicks = 0;
-      stop();
-      sendTooClose();
-    }
     if (dir == FORWARD)
     {
       if (forwardDist > newDist)
@@ -658,6 +647,18 @@ void loop()
         deltaDist = 0;
         newDist = 0;
         stop();
+      }
+
+      // if the bot gets too close to an object, stop everything and report to operator
+      int dist = readUltrasonic();
+      if (dist > 0 && dist < 50)
+      {
+        deltaDist = 0;
+        newDist = 0;
+        deltaTicks = 0;
+        targetTicks = 0;
+        stop();
+        sendTooClose();
       }
     }
     else if (dir == BACKWARD)
