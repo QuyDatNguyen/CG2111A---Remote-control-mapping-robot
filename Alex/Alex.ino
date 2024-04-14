@@ -651,7 +651,7 @@ void loop()
 
       // if the bot gets too close to an object, stop everything and report to operator
       int dist = readUltrasonic();
-      if (dist > 0 && dist < 50)
+      if (dist > 0 && dist < 30)
       {
         deltaDist = 0;
         newDist = 0;
