@@ -35,21 +35,20 @@ void handleError(TResult error)
 
 void handleStatus(TPacket *packet)
 {
-    printf("\n ------- ALEX STATUS REPORT ------- \n\n");
-    printf("Left Forward Ticks:\t\t%d\n", packet->params[0]);
-    printf("Right Forward Ticks:\t\t%d\n", packet->params[1]);
-    printf("Left Reverse Ticks:\t\t%d\n", packet->params[2]);
-    printf("Right Reverse Ticks:\t\t%d\n", packet->params[3]);
-    printf("Left Forward Ticks Turns:\t%d\n", packet->params[4]);
-    printf("Right Forward Ticks Turns:\t%d\n", packet->params[5]);
-    printf("Left Reverse Ticks Turns:\t%d\n", packet->params[6]);
-    printf("Right Reverse Ticks Turns:\t%d\n", packet->params[7]);
-    printf("Forward Distance:\t\t%d\n", packet->params[8]);
-    printf("Reverse Distance:\t\t%d\n", packet->params[9]);
-    printf("Target Ticks:\t\t\t%d\n", packet->params[10]);
-    printf("Delta Ticks:\t\t\t%d\n", packet->params[11]);
-    printf("Delta Dist:\t\t\t%d\n", packet->params[12]);
-    printf("\n---------------------------------------\n\n");
+    printf("\033[1m\033[36m🛜 Status Report\033[m\n");
+    printf(" Left Forward Ticks:\t\t%d\n", packet->params[0]);
+    printf(" Right Forward Ticks:\t\t%d\n", packet->params[1]);
+    printf(" Left Reverse Ticks:\t\t%d\n", packet->params[2]);
+    printf(" Right Reverse Ticks:\t\t%d\n", packet->params[3]);
+    printf(" Left Forward Ticks Turns:\t%d\n", packet->params[4]);
+    printf(" Right Forward Ticks Turns:\t%d\n", packet->params[5]);
+    printf(" Left Reverse Ticks Turns:\t%d\n", packet->params[6]);
+    printf(" Right Reverse Ticks Turns:\t%d\n", packet->params[7]);
+    printf(" Forward Distance:\t\t%d\n", packet->params[8]);
+    printf(" Reverse Distance:\t\t%d\n", packet->params[9]);
+    printf(" Target Ticks:\t\t\t%d\n", packet->params[10]);
+    printf(" Delta Ticks:\t\t\t%d\n", packet->params[11]);
+    printf(" Delta Dist:\t\t\t%d\n\n", packet->params[12]);
 }
 
 int map(int value, int fromLow, int fromHigh, int toLow, int toHigh)
@@ -57,8 +56,6 @@ int map(int value, int fromLow, int fromHigh, int toLow, int toHigh)
     return (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow;
 }
 
-// Red:    64
-// Green : 72 Blue : 73
 void handleColor(TPacket *packet)
 {
     // printf("\n ------- COLOR REPORT ------- \n\n");
@@ -66,11 +63,9 @@ void handleColor(TPacket *packet)
     rgb[0] = map(packet->params[0], 8, 80, 255, 0);
     rgb[1] = map(packet->params[1], 8, 80, 255, 0);
     rgb[2] = map(packet->params[2], 8, 80, 255, 0);
-    // printf("Red:\t%d\n", packet->params[0]);
-    // printf("Green:\t%d\n", packet->params[1]);
-    // printf("Blue:\t%d\n", packet->params[2]);
 
-    printf("Detected Color: \033[38;2;%d;%d;%dm██████\033[m %3d,%3d,%3d [raw: %3d, %3d, %3d]\n",
+    printf("\033[1m\033[32m🎨 Detected Color:\033[m\n");
+    printf(" \033[38;2;%d;%d;%dm██████\033[m %3d,%3d,%3d [raw: %3d, %3d, %3d]\n",
            rgb[0], rgb[1], rgb[2], rgb[0], rgb[1], rgb[2],
            packet->params[0], packet->params[1], packet->params[2]);
 }
@@ -103,7 +98,8 @@ void handleDistance(TPacket *packet)
     {
         printf("⋯");
     }
-    printf("\n            0    5   10   15   20 cms\nDetected distance: %d mm\n", packet->params[0]);
+    printf("\n            0    5   10   15   20 cms\n");
+    printf("\033[1m\033[31m📏 Detected distance:\033[m %d mm\n", packet->params[0]);
 }
 
 void handleResponse(TPacket *packet)
@@ -112,7 +108,10 @@ void handleResponse(TPacket *packet)
     switch (packet->command)
     {
     case RESP_OK:
-        printf("Command OK\n");
+        // printf("Command OK\n");
+        // green checkmark
+        printf("\033[32m✔︎ \n\033[m");
+        printf("\033[30mCommand OK\n\033[m");
         break;
 
     case RESP_STATUS:
@@ -122,14 +121,15 @@ void handleResponse(TPacket *packet)
         handleColor(packet);
         break;
     case RESP_TOO_CLOSE:
-        printf(" ⚠️ Notice\n Stopped because Alex is getting too close!\n");
+        printf("\033[1m\033[33m⚠️ Notice\n\033[m");
+        printf("Stopped because Alex is getting too close!\n");
         break;
     case RESP_IR_DISTANCE:
         handleDistance(packet);
         break;
 
     default:
-        printf("Arduino is confused\n");
+        printf("? Arduino is confused\n");
     }
 }
 
@@ -236,13 +236,13 @@ void getParams(TPacket *commandPacket, bool angle)
 {
     if (angle)
     {
-        printf("\033[35mAngle / Power?\033[m ");
-        printf("\033[30meg. 90 75\033[m: ");
+        printf("\033[1m\033[35mℹ️ Angle / Power?\033[m ");
+        printf("\033[30meg. 90 75\033[m ");
     }
     else
     {
-        printf("\033[35mDistance / Power?\033[m ");
-        printf("\033[30meg. 50 75\033[m: ");
+        printf("\033[1m\033[35mℹ️ Distance / Power?\033[m ");
+        printf("\033[30meg. 50 75\033[m ");
     }
     scanf("%d %d", &commandPacket->params[0], &commandPacket->params[1]);
     flushInput();
@@ -326,7 +326,8 @@ void showControls()
 {
     printf("\n");
     // "Controls" in yellow text
-    printf("              \033[33mControls\033[m\n");
+    // "Welcome" in bold text
+    printf("\033[1m\033[33m> Controls\033[m\n");
     printf("   F      🛑 [S]top Robot    🎨 [D]etect Color \n");
     printf(" L   R    📊 [G]et Stats     📏 [U]ltrasonic Measurement \n");
     printf("   B      🗑️  [C]Clear Stats  🟥 [Q]uit \n");
