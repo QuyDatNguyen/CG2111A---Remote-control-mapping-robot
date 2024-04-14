@@ -8,7 +8,6 @@
 #include "Alex/constants.h"
 #include "serial.h"
 #include "serialize.h"
-#include <ncurses.h>
 
 // #define PORT_NAME "/dev/ttyACM1"
 #define PORT_NAME_WITHOUT_NUM "/dev/ttyACM"
@@ -366,7 +365,7 @@ int main(int argc, char *argv[])
         // scanf("%c", &ch);
         // above but without requiring an enter
         // something like getch() but cross platform
-        ch = getch();
+        ch = getchar();
 
         // Purge extraneous characters from input stream
         flushInput();
