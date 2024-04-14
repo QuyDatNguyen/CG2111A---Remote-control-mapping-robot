@@ -317,9 +317,9 @@ void sendCommand(char command)
 void showControls()
 {
     printf("\n");
-    printf("   F      🛑 S   🎨 D \n");
-    printf(" L   R    📊 G   📏 U \n");
-    printf("   B      🗑️  C   🟥 Q \n");
+    printf("   F      🛑 [S]top Robot    🎨 [D]etect Color \n");
+    printf(" L   R    📊 [G]et Stats     📏 [U]ltrasonic Measurement \n");
+    printf("   B      🗑️  [C]Clear Stats   🟥 [Q]uit \n");
     printf("\n");
 }
 
