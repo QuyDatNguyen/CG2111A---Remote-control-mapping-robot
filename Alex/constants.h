@@ -49,6 +49,7 @@ typedef enum
 
 typedef enum
 {
+  STOP = 0,
   FORWARD = 1,
   BACKWARD = 2,
   LEFT = 3,

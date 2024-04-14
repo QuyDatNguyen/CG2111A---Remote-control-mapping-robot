@@ -49,7 +49,7 @@ volatile unsigned long rightReverseTicksTurns;
 #define WHEEL_CIRC 20
 #define ALEX_LENGTH 13
 #define ALEX_BREADTH 13
-#define PI 3.141592654
+#define CIRC_PI 3.141592654
 volatile float alexDiagonal = 0.0;
 volatile float alexCirc = 0.0;
 /*
@@ -671,7 +671,7 @@ void setup()
 {
   // put your setup code here, to run once:
   alexDiagonal = sqrt((ALEX_LENGTH * ALEX_LENGTH) + (ALEX_BREADTH * ALEX_BREADTH));
-  alexCirc = PI * alexDiagonal;
+  alexCirc = CIRC_PI * alexDiagonal;
   cli();
   setupEINT();
   setupSerial();
