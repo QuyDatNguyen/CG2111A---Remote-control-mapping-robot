@@ -99,7 +99,10 @@ void handleDistance(TPacket *packet)
         printf("⋯");
     }
     printf("\n            0    5   10   15   20 cms\n");
-    printf("\033[1m\033[31m📏 Detected distance:\033[m %d mm\n", packet->params[0]);
+    double cms = distance / 10.0;
+    // printf("\033[1m\033[31m📏 Detected distance:\033[m %d mm\n", packet->params[0]);
+    // show in cm with 1 decimal pt instead
+    printf("\033[1m\033[31m📏 Detected distance:\033[m %.1f cm\n", cms);
 }
 
 void handleResponse(TPacket *packet)
@@ -110,7 +113,7 @@ void handleResponse(TPacket *packet)
     case RESP_OK:
         // printf("Command OK\n");
         // green checkmark
-        printf("\033[32m✔︎ \n\033[m");
+        printf("\033[32m✔︎ \033[m");
         printf("\033[30mCommand OK\n\033[m");
         break;
 
