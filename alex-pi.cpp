@@ -327,16 +327,16 @@ int main(int argc, char *argv[])
     char PORT_NAME[20];
     sprintf(PORT_NAME, "%s%s", PORT_NAME_WITHOUT_NUM, port);
 
-    printf("Connecting to %s...", PORT_NAME);
+    printf("4. Connecting to %s... ", PORT_NAME);
 
     // Connect to the Arduino
     startSerial(PORT_NAME, BAUD_RATE, 8, 'N', 1, 5);
 
     // Sleep for two seconds
-    printf("Connected! (hopefully)\n");
-    printf("Waiting 2 seconds for Arduino to reboot... ");
+    printf("   Connected! (hopefully)\n");
+    printf("5. Waiting 2 seconds for Arduino to reboot... ");
     sleep(2);
-    printf("Done!\n");
+    printf("   Done! 😸\n");
 
     // Spawn receiver thread
     pthread_t recv;
