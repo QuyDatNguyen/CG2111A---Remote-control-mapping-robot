@@ -2,6 +2,7 @@
 
 SSH into the robot, and cd to `~/cg2111a/Desktop/cg2111a_git`!
 
+
 ```sh
 ssh pi@raspberrypi.local
 ```
