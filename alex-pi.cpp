@@ -232,10 +232,18 @@ void flushInput()
         ;
 }
 
-void getParams(TPacket *commandPacket)
+void getParams(TPacket *commandPacket, bool angle)
 {
-    printf("Enter distance/angle in cm/degrees (e.g. 50) and power in %% (e.g. 75) separated by space.\n");
-    printf("E.g. 50 75 means go at 50 cm at 75%% power for forward/backward, or 50 degrees left or right turn at 75%%  power\n");
+    if (angle)
+    {
+        printf("\033[35mAngle / Power?\033[m ");
+        printf("\033[30meg. 90 75\033[m: ");
+    }
+    else
+    {
+        printf("\033[35mDistance / Power?\033[m ");
+        printf("\033[30meg. 50 75\033[m: ");
+    }
     scanf("%d %d", &commandPacket->params[0], &commandPacket->params[1]);
     flushInput();
 }
@@ -250,28 +258,28 @@ void sendCommand(char command)
     {
     case 'f':
     case 'F':
-        getParams(&commandPacket);
+        getParams(&commandPacket, false);
         commandPacket.command = COMMAND_FORWARD;
         sendPacket(&commandPacket);
         break;
 
     case 'b':
     case 'B':
-        getParams(&commandPacket);
+        getParams(&commandPacket, false);
         commandPacket.command = COMMAND_REVERSE;
         sendPacket(&commandPacket);
         break;
 
     case 'l':
     case 'L':
-        getParams(&commandPacket);
+        getParams(&commandPacket, true);
         commandPacket.command = COMMAND_TURN_LEFT;
         sendPacket(&commandPacket);
         break;
 
     case 'r':
     case 'R':
-        getParams(&commandPacket);
+        getParams(&commandPacket, true);
         commandPacket.command = COMMAND_TURN_RIGHT;
         sendPacket(&commandPacket);
         break;
@@ -317,9 +325,11 @@ void sendCommand(char command)
 void showControls()
 {
     printf("\n");
+    // "Controls" in yellow text
+    printf("              \033[33mControls\033[m\n");
     printf("   F      🛑 [S]top Robot    🎨 [D]etect Color \n");
     printf(" L   R    📊 [G]et Stats     📏 [U]ltrasonic Measurement \n");
-    printf("   B      🗑️  [C]Clear Stats   🟥 [Q]uit \n");
+    printf("   B      🗑️  [C]Clear Stats  🟥 [Q]uit \n");
     printf("\n");
 }
 
