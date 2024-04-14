@@ -669,7 +669,7 @@ void loop()
         stop();
       }
     }
-    else if (dir == STOP)
+    else if (dir == STOPPED)
     {
       deltaDist = 0;
       newDist = 0;
@@ -698,7 +698,7 @@ void loop()
         stop();
       }
     }
-    else if (dir == STOP)
+    else if (dir == STOPPED)
     {
       deltaTicks = 0;
       targetTicks = 0;
