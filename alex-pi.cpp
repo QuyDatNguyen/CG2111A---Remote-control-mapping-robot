@@ -122,7 +122,7 @@ void handleResponse(TPacket *packet)
         handleColor(packet);
         break;
     case RESP_TOO_CLOSE:
-        printf("Stopped because too close!\n");
+        printf(" ⚠️ Notice\n Stopped because Alex is getting too close!\n");
         break;
     case RESP_IR_DISTANCE:
         handleDistance(packet);
