@@ -16,9 +16,9 @@
  */
 
 // Number of ticks per 1 revolution from the wheel encoder.
-#define COUNTS_PER_REV 4
+#define COUNTS_PER_REV 4.8
 // Wheel circumference in cm.
-#define WHEEL_CIRC 20
+#define WHEEL_CIRC 16
 #define ALEX_LENGTH 13
 #define ALEX_BREADTH 13
 #define CIRC_PI 3.141592654
@@ -42,7 +42,7 @@ volatile double ALEX_CIRC = 0.0;
 #define ECHO (1 << 2)        // PL2, PIN 47
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
-#define GAP_FROM_FRONT 35    // gap between sensor and front of the robot, in mm
+#define GAP_FROM_FRONT 10    // gap between sensor and front of the robot, in mm
 
 // ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
 // ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
@@ -444,21 +444,24 @@ void sendColor()
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC &= ~COLOR_SENSOR_S3;
   delay(COLOR_SENSOR_WAIT);
-  colorR = getAvgReading(5);
+  redRead = getAvgReading(5);
+  colorR = map(redRead, 4035, 4830, 255, 0);
 
   // setting GREEN filtered photodiodes to be read
   // setting S2 and S3 to HIGH
   PORTC |= (COLOR_SENSOR_S2);
   PORTC |= (COLOR_SENSOR_S3);
   delay(COLOR_SENSOR_WAIT);
-  colorG = getAvgReading(5);
+  greenRead = getAvgReading(5);
+  colorG = map(greenRead, 4968, 5207, 255, 0);
 
   // setting BLUE filtered photodiodes to be read
   // setting S2 to LOW and S3 to HIGH
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC |= COLOR_SENSOR_S3;
   delay(COLOR_SENSOR_WAIT);
-  colorB = getAvgReading(5);
+  blueRead = getAvgReading(5);
+  colorB = map(blueRead, 3062,4197, 255, 0);
 
   messagePacket.params[0] = colorR;
   messagePacket.params[1] = colorG;
