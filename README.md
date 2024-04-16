@@ -55,7 +55,7 @@ https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
      Eg: RPi IP is 172.20.10.5. If the IP of your Ubuntu is not 172.20.10.x (x is some number) then you are not connected to same network yet.
      '''
    You may proceed to find the way yourself. For UTM user, to save time can just change to Bridged Networking (search on Internet for better instruction, or can ask me)
-   - Regardless of what may come next, ensure you at least have installed workspace and Hector_slam on your PC first. Follow "3.1 Creating a New Workspace and Building". Only do step 2.Activate ROS and LiDAR Node on Raspberry Pi if you choose to set RPi as master (Jayden and I cannot use that on Mac though)
+   - Regardless of what may come next, ensure you at least have installed workspace and Hector_slam on your PC first. Follow "3.1 Creating a New Workspace and Building". Only do step 2.Activate ROS and LiDAR Node on Raspberry Pi if you choose to set RPi as master (Jaden and I cannot use that on Mac though)
    - This one serves for setting RPi as master. If these 2 steps cannot work, then there maybe some reasons: __
      a. Forget to setup
      ```sh
