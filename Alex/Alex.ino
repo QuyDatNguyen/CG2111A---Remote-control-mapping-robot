@@ -444,24 +444,24 @@ void sendColor()
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC &= ~COLOR_SENSOR_S3;
   delay(COLOR_SENSOR_WAIT);
-  redRead = getAvgReading(5);
-  colorR = map(redRead, 4035, 4830, 255, 0);
+  colorR = getAvgReading(5);
+  //colorR = map(redRead, 4035, 4830, 255, 0);
 
   // setting GREEN filtered photodiodes to be read
   // setting S2 and S3 to HIGH
   PORTC |= (COLOR_SENSOR_S2);
   PORTC |= (COLOR_SENSOR_S3);
   delay(COLOR_SENSOR_WAIT);
-  greenRead = getAvgReading(5);
-  colorG = map(greenRead, 4968, 5207, 255, 0);
+  colorG = getAvgReading(5);
+  //colorG = map(greenRead, 4968, 5207, 255, 0);
 
   // setting BLUE filtered photodiodes to be read
   // setting S2 to LOW and S3 to HIGH
   PORTC &= ~COLOR_SENSOR_S2;
   PORTC |= COLOR_SENSOR_S3;
   delay(COLOR_SENSOR_WAIT);
-  blueRead = getAvgReading(5);
-  colorB = map(blueRead, 3062,4197, 255, 0);
+  colorB = getAvgReading(5);
+  //colorB = map(blueRead, 3062,4197, 255, 0);
 
   messagePacket.params[0] = colorR;
   messagePacket.params[1] = colorG;
