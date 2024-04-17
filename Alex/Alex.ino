@@ -43,6 +43,10 @@ volatile double ALEX_CIRC = 0.0;
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
 #define GAP_FROM_FRONT 10    // gap between sensor and front of the robot, in mm
+/**
+ *Buzzer [PORT L]
+  */
+#define BUZZ (1 << 6)        // PL6, PIN 43
 
 // ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
 // ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
@@ -481,6 +485,27 @@ void sendTooClose()
   sendResponse(&messagePacket);
 }
 
+// Buzzer (I add in for fun and a bit more marls :))))
+void setupBuzzer() {
+  DDRL |= BUZZ //SET PIN 43 AS OUTPUT
+}
+void sendBuzz() {
+  tone(43, 261); //note C
+  delay(500);
+  tone(43, 261);
+  delay(500);
+  tone(43, 392);
+  delay(250);
+  tone(43, 392);
+  delay(250);
+  tone(43, 440);
+  delay(250);
+  tone(43, 440);
+  delay(250);
+  tone(43, 392);
+  delay(250);
+}
+
 // ░█▀▀░█▀▀░▀█▀░█░█░█▀█
 // ░▀▀█░█▀▀░░█░░█░█░█▀▀
 // ░▀▀▀░▀▀▀░░▀░░▀▀▀░▀░░
@@ -542,6 +567,7 @@ void handleCommand(TPacket *command)
   case COMMAND_GET_COLOUR:
     sendOK();
     sendColor();
+    sendBuzz();
     break;
   case COMMAND_GET_IR:
     sendOK();
@@ -596,6 +622,7 @@ void setup()
   setupEINT();
   setupSerial();
   setupcolour();
+  setupBuzz();
   startSerial();
   enablePullups();
   initializeState();
