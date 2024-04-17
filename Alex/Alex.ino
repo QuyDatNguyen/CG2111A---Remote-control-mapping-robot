@@ -44,9 +44,9 @@ volatile double ALEX_CIRC = 0.0;
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
 #define GAP_FROM_FRONT 10    // gap between sensor and front of the robot, in mm
 /**
- *Buzzer [PORT L]
+ *Buzzer [PORT D]
   */
-#define BUZZ (1 << 6)        // PL6, PIN 43
+#define BUZZ (1 << 0)        // PD0, pin 21
 
 // ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
 // ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
@@ -487,24 +487,25 @@ void sendTooClose()
 
 // Buzzer (I add in for fun and a bit more marls :))))
 void setupBuzzer() {
-  DDRL |= BUZZ; //SET PIN 43 AS OUTPUT
+  DDRD |= BUZZ; //SET PIN 43 AS OUTPUT
 }
 void sendBuzz() {
-  tone(43, 261); //note C
+  tone(21, 261); //note C
   delay(500);
-  tone(43, 261);
+  tone(21, 261);
   delay(500);
-  tone(43, 392);
+  tone(21, 392);
   delay(250);
-  tone(43, 392);
+  tone(21, 392);
   delay(250);
-  tone(43, 440);
+  tone(21, 440);
   delay(250);
-  tone(43, 440);
+  tone(21, 440);
   delay(250);
-  tone(43, 392);
+  tone(21, 392);
   delay(250);
- notone(43);
+ notone(21);
+ delay(10);
 }
 
 // ░█▀▀░█▀▀░▀█▀░█░█░█▀█
