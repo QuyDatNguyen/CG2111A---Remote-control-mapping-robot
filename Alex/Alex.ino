@@ -47,13 +47,14 @@ volatile double ALEX_CIRC = 0.0;
  *Buzzer [PORT D]
   */
 #define BUZZ (1 << 0)        // PD0, pin 21
+/**
 int length = 15; // the number of notes
 int speakerPin = 21;
 //twinkle twinkle little star
 char notes[] = "ccggaag ffeeddc ggffeed ggffeed ccggaag ffeeddc "; // a space represents a rest
 int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
 int tempo = 300;
-
+*/
 // ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
 // ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
 // ░░▀░░▀░▀░▀░▀░▀▀▀░▀░▀░▀▀░░▀▀▀░▀▀▀░▀▀▀
@@ -490,7 +491,6 @@ void sendTooClose()
 
   sendResponse(&messagePacket);
 }
-/**
 // Buzzer (I add in for fun and a bit more marls :))))
 void setupBuzzer() {
   DDRD |= BUZZ; //SET PIN 43 AS OUTPUT
@@ -513,7 +513,7 @@ void sendBuzz() {
  noTone(21);
  delay(10);
 }
-*/
+/**
 void playTone(int tone, int duration) {
   for (long i = 0; i < duration * 1000L; i += tone * 2) {
     digitalWrite(speakerPin, HIGH);
@@ -550,6 +550,7 @@ void sendBuzz() {
     delay(tempo / 2); 
   }
 }
+*/
 // ░█▀▀░█▀▀░▀█▀░█░█░█▀█
 // ░▀▀█░█▀▀░░█░░█░█░█▀▀
 // ░▀▀▀░▀▀▀░░▀░░▀▀▀░▀░░
