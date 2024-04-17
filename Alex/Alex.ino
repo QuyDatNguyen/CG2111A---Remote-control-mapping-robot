@@ -356,7 +356,7 @@ void setupUltrasonic()
 int readUltrasonic()
 {
   PORTL &= ~TRIG; // set LOW
-  delayMicroseconds(10);
+  delayMicroseconds(2);
   PORTL |= TRIG; // set HIGH
   delayMicroseconds(10);
   PORTL &= ~TRIG; // set LOW
