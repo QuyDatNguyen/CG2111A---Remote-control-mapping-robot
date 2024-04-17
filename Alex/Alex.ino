@@ -355,6 +355,8 @@ void setupUltrasonic()
 // Reads the ultrasonic sensor and returns the distance in mms
 int readUltrasonic()
 {
+  PORTL &= ~TRIG; // set LOW
+  delayMicroseconds(10);
   PORTL |= TRIG; // set HIGH
   delayMicroseconds(10);
   PORTL &= ~TRIG; // set LOW
