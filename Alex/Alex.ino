@@ -16,7 +16,7 @@
  */
 
 // Number of ticks per 1 revolution from the wheel encoder.
-#define COUNTS_PER_REV 4.8
+#define COUNTS_PER_REV 4
 // Wheel circumference in cm.
 #define WHEEL_CIRC 16
 #define ALEX_LENGTH 13
