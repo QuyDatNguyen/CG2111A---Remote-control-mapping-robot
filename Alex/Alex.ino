@@ -36,10 +36,10 @@ volatile double ALEX_CIRC = 0.0;
 #define COLOR_SENSOR_WAIT 1000   // in millisecs
 
 /**
- * Ultrasound Sensor [Port L]
+ * Ultrasound Sensor [Port C]
  */
-#define TRIG (1 << 3)        // PL3, PIN 46
-#define ECHO (1 << 2)        // PL2, PIN 47
+#define TRIG (1 << 6)        // PL3, PIN 31
+#define ECHO (1 << 7)        // PL2, PIN 30
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
 #define GAP_FROM_FRONT 10    // gap between sensor and front of the robot, in mm
@@ -352,20 +352,20 @@ ISR(INT2_vect) // NOT WORKING (PROPERLY)
 // ultrasonic sensor setup
 void setupUltrasonic()
 {
-  DDRL |= TRIG;  // set PB5 as trigger pin (output)
-  DDRL &= ~ECHO; // set PB6 as echo pin (input)
+  DDRC |= TRIG;  // set PB5 as trigger pin (output)
+  DDRC &= ~ECHO; // set PB6 as echo pin (input)
 }
 
 // Reads the ultrasonic sensor and returns the distance in mms
 int readUltrasonic()
 {
-  PORTL &= ~TRIG; // set LOW
+  PORTC &= ~TRIG; // set LOW
   delayMicroseconds(2);
-  PORTL |= TRIG; // set HIGH
+  PORTC |= TRIG; // set HIGH
   delayMicroseconds(10);
-  PORTL &= ~TRIG; // set LOW
+  PORTC &= ~TRIG; // set LOW
 
-  unsigned long duration = pulseIn(47, HIGH);                   // read pulse length in us
+  unsigned long duration = pulseIn(30, HIGH);                   // read pulse length in us
   double dist = duration / 2 * SPEED_OF_SOUND - GAP_FROM_FRONT; // convert to mms
   // return dist;
   return (int)dist;
