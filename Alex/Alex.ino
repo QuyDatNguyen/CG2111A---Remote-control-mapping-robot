@@ -487,7 +487,7 @@ void sendTooClose()
 
 // Buzzer (I add in for fun and a bit more marls :))))
 void setupBuzzer() {
-  DDRL |= BUZZ //SET PIN 43 AS OUTPUT
+  DDRL |= BUZZ; //SET PIN 43 AS OUTPUT
 }
 void sendBuzz() {
   tone(43, 261); //note C
@@ -504,6 +504,7 @@ void sendBuzz() {
   delay(250);
   tone(43, 392);
   delay(250);
+ notone(43);
 }
 
 // ░█▀▀░█▀▀░▀█▀░█░█░█▀█
@@ -622,7 +623,7 @@ void setup()
   setupEINT();
   setupSerial();
   setupcolour();
-  setupBuzz();
+  setupBuzzer();
   startSerial();
   enablePullups();
   initializeState();
