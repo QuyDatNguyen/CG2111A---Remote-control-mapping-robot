@@ -47,6 +47,12 @@ volatile double ALEX_CIRC = 0.0;
  *Buzzer [PORT D]
   */
 #define BUZZ (1 << 0)        // PD0, pin 21
+int length = 15; // the number of notes
+int speakerPin = 21;
+//twinkle twinkle little star
+char notes[] = "ccggaag ffeeddc ggffeed ggffeed ccggaag ffeeddc "; // a space represents a rest
+int beats[] = { 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2, 4 };
+int tempo = 300;
 
 // ░█░█░█▀█░█▀▄░▀█▀░█▀█░█▀▄░█░░░█▀▀░█▀▀
 // ░▀▄▀░█▀█░█▀▄░░█░░█▀█░█▀▄░█░░░█▀▀░▀▀█
@@ -484,7 +490,7 @@ void sendTooClose()
 
   sendResponse(&messagePacket);
 }
-
+/**
 // Buzzer (I add in for fun and a bit more marls :))))
 void setupBuzzer() {
   DDRD |= BUZZ; //SET PIN 43 AS OUTPUT
@@ -504,10 +510,46 @@ void sendBuzz() {
   delay(250);
   tone(21, 392);
   delay(250);
- notone(21);
+ noTone(21);
  delay(10);
 }
+*/
+void playTone(int tone, int duration) {
+  for (long i = 0; i < duration * 1000L; i += tone * 2) {
+    digitalWrite(speakerPin, HIGH);
+    delayMicroseconds(tone);
+    digitalWrite(speakerPin, LOW);
+    delayMicroseconds(tone);
+  }
+}
 
+void playNote(char note, int duration) {
+  char names[] = { 'c', 'd', 'e', 'f', 'g', 'a', 'b', 'C' };
+  int tones[] = { 1915, 1700, 1519, 1432, 1275, 1136, 1014, 956 };
+  
+  // play the tone corresponding to the note name
+  for (int i = 0; i < 8; i++) {
+    if (names[i] == note) {
+      playTone(tones[i], duration);
+    }
+  }
+}
+void setupBuzzer() {
+  pinMode(speakerPin, OUTPUT);
+}
+
+void sendBuzz() {
+  for (int i = 0; i < length; i++) {
+    if (notes[i] == ' ') {
+      delay(beats[i] * tempo); // rest
+    } else {
+      playNote(notes[i], beats[i] * tempo);
+    }
+    
+    // pause between notes
+    delay(tempo / 2); 
+  }
+}
 // ░█▀▀░█▀▀░▀█▀░█░█░█▀█
 // ░▀▀█░█▀▀░░█░░█░█░█▀▀
 // ░▀▀▀░▀▀▀░░▀░░▀▀▀░▀░░
