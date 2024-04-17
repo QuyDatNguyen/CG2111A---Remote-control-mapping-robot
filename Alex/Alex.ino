@@ -38,8 +38,8 @@ volatile double ALEX_CIRC = 0.0;
 /**
  * Ultrasound Sensor [Port C]
  */
-#define TRIG (1 << 6)        // PL3, PIN 31
-#define ECHO (1 << 7)        // PL2, PIN 30
+#define TRIG (1 << 6)        // PC3, PIN 31
+#define ECHO (1 << 7)        // PC2, PIN 30
 #define SPEED_OF_SOUND 0.345 // (mm/microseconds)
 #define TIMEOUT 1e4          // Max microseconds to wait; choose according to max distance of wall
 #define GAP_FROM_FRONT 10    // gap between sensor and front of the robot, in mm
