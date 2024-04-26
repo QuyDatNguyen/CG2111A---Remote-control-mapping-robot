@@ -44,7 +44,7 @@ sh letsgo.sh
 
 - Check if the port is defined correctly! Sometimes its not ttyACM0
 - Anything else ask me (kyuu)
-# ROS Networking
+# ROS Networking (Members instructions :))))
 If you attempt to install from the scratch, it will be very time consuming (literally 1 hour or even more). I suggest install Ubuntu and proceed step 1, 3.1 Creating New Workspace and Building at home first.
 Before attempt to do ROS Networking, remember to ensure at least you can run SLAM as tutorial 3 (otherwise there is high chance there may be hardware problem :)))
 https://www.comp.nus.edu.sg/~guoyi/tutorial/cg2111a/ros-network/
