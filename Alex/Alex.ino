@@ -492,10 +492,10 @@ void sendTooClose()
   sendResponse(&messagePacket);
 }
 // Buzzer (I add in for fun and a bit more marls :))))
-void setupBuzzer() {
+void setupSpeaker() {
   DDRD |= BUZZ; //SET PIN 43 AS OUTPUT
 }
-void sendBuzz() {
+void sendSpeaker() {
   tone(21, 261); //note C
   delay(500);
   tone(21, 261);
@@ -612,7 +612,7 @@ void handleCommand(TPacket *command)
   case COMMAND_GET_COLOUR:
     sendOK();
     sendColor();
-    sendBuzz();
+    sendSpeaker();
     break;
   case COMMAND_GET_IR:
     sendOK();
@@ -667,7 +667,7 @@ void setup()
   setupEINT();
   setupSerial();
   setupcolour();
-  setupBuzzer();
+  setupSpeaker();
   startSerial();
   enablePullups();
   initializeState();
